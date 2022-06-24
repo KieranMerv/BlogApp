@@ -26,6 +26,11 @@ namespace dotnet_BlogApp.Data.DbInitializer
                 _logger.LogError(ex, "An error occurred during migration.");
             }
 
+            if (await _context.Posts.AnyAsync())
+            {
+                return;
+            }
+
             var postArraySeed = new Post[]
             {
                 new Post()
