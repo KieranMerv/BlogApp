@@ -16,7 +16,7 @@ namespace dotnet_BlogApp.Data.DbInitializer
         {
             try
             {
-                if (_context.Database.GetPendingMigrations().Count() > 0)
+                if ((await _context.Database.GetPendingMigrationsAsync()).Count() > 0)
                 {
                     await _context.Database.MigrateAsync();
                 }
