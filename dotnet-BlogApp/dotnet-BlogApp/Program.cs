@@ -1,9 +1,11 @@
 using dotnet_BlogApp.Data;
+using dotnet_BlogApp.Data.DbInitializer;
 using dotnet_BlogApp.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var appHost = builder.Configuration["AppHost"];
 // Add services to the container.
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IDbInitializer, DbInitializer>();
@@ -19,6 +21,11 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 
+app.UseCors(policy => policy.AllowAnyHeader()
+    .AllowAnyMethod()
+    .AllowCredentials()
+    .WithOrigins(appHost));
+
 SeedDatabase();
 
 app.UseAuthorization();
@@ -31,7 +38,7 @@ void SeedDatabase()
 {
     using (var scope = app.Services.CreateScope())
     {
-        var dbInitializer = scope.ServiceProvider.GetRequiredService(IDbInitializer);
+        var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
 
         dbInitializer.Initialize();
     }
