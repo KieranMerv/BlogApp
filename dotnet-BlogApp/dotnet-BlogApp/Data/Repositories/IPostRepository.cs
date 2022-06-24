@@ -8,7 +8,7 @@ namespace dotnet_BlogApp.Data.Repositories
         Task<IEnumerable<Post>> GetAll();
         Task<Post?> GetById(Guid Id);
         Task Add(Post post);
-        void Update(PostVM postVM, Post post);
+        void Update(PostAddEditVM postAddEditVM, Post post);
         void Delete(Post post);
     }
 }

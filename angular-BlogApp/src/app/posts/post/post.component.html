@@ -1,28 +1,61 @@
-<button *ngIf="postId !== null" class="btn btn-secondary" (click)="toggleEditMode()">{{editMode ? 'Click to Edit' : 'Click to View'}}</button>
-<form [formGroup]="postForm" (ngSubmit)="onSubmit()">
-  <div class="mb-3">
-    <label for="titleInput" class="form-label">Post Title</label>
-    <input type="email" class="form-control" id="titleInput" placeholder="name@example.com" formControlName="postTitle" [readonly]="!editMode">
+<div class="container-fluid">
+  <div class="d-flex flex-column align-items-center">
+
+    <div class="w-50 mt-5 d-flex justify-content-start">
+      <button *ngIf="postId !== null" class="btn btn-secondary" (click)="toggleEditMode()">{{editMode ? 'Click to View' : 'Click to Edit'}}</button>
+    </div>
+
+    <div class="w-50 my-5">
+      <form [formGroup]="postForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label for="titleInput" class="form-label">Post Title</label>
+          <input type="email" class="form-control" id="titleInput" placeholder="name@example.com" formControlName="postTitle" [readonly]="!editMode" />
+        </div>
+        <div class="mb-3">
+          <label for="bodyTextarea" class="form-label">Post Content</label>
+          <textarea class="form-control" id="bodyTextarea" rows="7" formControlName="postBody" [readonly]="!editMode"></textarea>
+        </div>
+        <div class="d-flex justify-content-start my-5">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" [value]="false" id="isPublic" formControlName="postIsPrivate" [attr.disabled]="!editMode ? '' : null" />
+            <label class="form-check-label" for="isPublic">
+              Public
+            </label>
+          </div>
+          <div class="form-check ms-4">
+            <input class="form-check-input" type="radio" [value]="true" id="isPrivate" formControlName="postIsPrivate" [attr.disabled]="!editMode ? '' : null" />
+            <label class="form-check-label" for="isPrivate">
+              Private
+            </label>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-end">
+          <div>
+            <small class="d-block text-secondary opacity-50 fs-5">Updated: {{ postVM.updated | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>
+            <small class="d-block text-secondary opacity-50 fs-5">Created: {{ postVM.created | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>
+          </div>
+          <div class="d-flex justify-content-end">
+            <button *ngIf="editMode" type="submit" class="btn me-2" [ngClass]="this.postId === null ? 'btn-success' : 'btn-primary'" >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+              </svg>
+              {{ this.postId === null ? 'Create' : 'Update' }}
+            </button>
+            <button type ="button" *ngIf="editMode && this.postId !== null" (click)="openModal(template)" class="btn btn-danger">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+              </svg>
+              Delete
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    
   </div>
-  <div class="mb-3">
-    <label for="bodyTextarea" class="form-label">Post Content</label>
-    <textarea class="form-control" id="bodyTextarea" rows="3" formControlName="postBody" [readonly]="!editMode"></textarea>
-  </div>
-  <button *ngIf="editMode" type="submit">
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-      <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-      <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-    </svg>
-    {{ this.postId === null ? 'Create' : 'Update' }}
-  </button>
-  <button *ngIf="editMode" (click)="openModal(template)" class="btn btn-primary">
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-      <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-      <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-    </svg>
-    Delete
-  </button>
-</form>
+</div>
 
 <ng-template #template>
   <div class="modal-header">
@@ -34,6 +67,10 @@
   <div class="modal-body">
     Do you really want to delete this post? This action cannot be undone.
   </div>
-  <button class="btn btn-secondary-outline" (click)="modalRef?.hide()">Cancel</button>
-  <button class="btn btn-danger" (click)="deletePost(); modalRef?.hide();">Delete</button>
+  <div class="d-flex justify-content-end">
+    <div class="my-3">
+      <button type="button" class="btn btn-outline-secondary" (click)="modalRef?.hide()">Cancel</button>
+      <button type="button" class="btn btn-danger ms-2 me-3" (click)="deletePost(); modalRef?.hide();">Delete</button>
+    </div>
+  </div>
 </ng-template>

@@ -12,7 +12,7 @@ using dotnet_BlogApp.Data;
 namespace dotnet_BlogApp.Migrations
 {
     [DbContext(typeof(BlogDbContext))]
-    [Migration("20220624052842_InitialCreate")]
+    [Migration("20220625125124_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,6 +36,9 @@ namespace dotnet_BlogApp.Migrations
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsPrivate")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Title")
                         .IsRequired()

@@ -4,4 +4,5 @@ export interface PostVM {
   body: string;
   created: Date;
   updated: Date;
+  isPrivate: boolean;
 }

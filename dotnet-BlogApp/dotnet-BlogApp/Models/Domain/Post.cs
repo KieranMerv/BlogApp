@@ -7,5 +7,6 @@
         public string Body { get; set; } = "";
         public DateTime Created { get; set; } = DateTime.UtcNow;
         public DateTime Updated { get; set; } = DateTime.UtcNow;
+        public bool IsPrivate { get; set; } = true;
     }
 }

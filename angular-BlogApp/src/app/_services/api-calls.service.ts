@@ -21,8 +21,8 @@ export class ApiCallsService {
     return this.http.get<PostVM>(this.baseApiUrl + "/posts/" + id);
   }
 
-  createPost(postAddEditVM: PostAddEditVM): Observable<void> {
-    return this.http.post<void>(this.baseApiUrl + "/posts", postAddEditVM);
+  createPost(postAddEditVM: PostAddEditVM): Observable<string> {
+    return this.http.post<string>(this.baseApiUrl + "/posts", postAddEditVM);
   }
 
   updatePost(id: string, postAddEditVM: PostAddEditVM): Observable<void> {

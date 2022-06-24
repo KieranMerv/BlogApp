@@ -3,4 +3,5 @@ export interface PostAddEditVM {
   body: string;
   created: Date;
   updated: Date;
+  isPrivate: boolean;
 }

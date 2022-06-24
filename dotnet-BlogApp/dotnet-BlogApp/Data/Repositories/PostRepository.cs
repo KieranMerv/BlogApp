@@ -28,13 +28,32 @@ namespace dotnet_BlogApp.Data.Repositories
             await _context.Posts.AddAsync(post);
         }
 
-        public void Update(PostVM postVM, Post post)
+        public void Update(PostAddEditVM postAddEditVM, Post post)
         {
-            if (post.Title != postVM.Title) post.Title = postVM.Title;
-            if (post.Body != postVM.Body) post.Title = postVM.Title;
-            if (post.Updated != postVM.Updated) post.Updated = postVM.Updated;
+            bool postChanged = false;
 
-            _context.Posts.Update(post);
+            if (post.Title != postAddEditVM.Title)
+            {
+                post.Title = postAddEditVM.Title;
+                postChanged = true;
+            }
+
+            if (post.Body != postAddEditVM.Body)
+            {
+                post.Body = postAddEditVM.Body;
+                postChanged = true;
+            }
+
+            if (post.IsPrivate != postAddEditVM.IsPrivate)
+            {
+                post.IsPrivate = postAddEditVM.IsPrivate;
+                postChanged = true;
+            }
+
+            if (postChanged == true) post.Updated = DateTime.Now;
+
+            // Not needed!
+            // _context.Posts.Update(post);
         }
 
         public void Delete(Post post)

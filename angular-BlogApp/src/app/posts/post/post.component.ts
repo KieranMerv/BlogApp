@@ -1,8 +1,9 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { PostAddEditVM } from 'src/app/_models/post-addeditVM.model';
+import { PostVM } from 'src/app/_models/post-VM.model';
 import { ApiCallsService } from 'src/app/_services/api-calls.service';
 
 @Component({
@@ -13,13 +14,23 @@ import { ApiCallsService } from 'src/app/_services/api-calls.service';
 export class PostComponent implements OnInit {
   postForm = new FormGroup({
     postTitle: new FormControl(''),
-    postBody: new FormControl('')
+    postBody: new FormControl(''),
+    postIsPrivate: new FormControl(true)
   });
   postAddEditVM: PostAddEditVM = {
     title: '',
     body: '',
     created: new Date(Date.now()),
-    updated: new Date(Date.now())
+    updated: new Date(Date.now()),
+    isPrivate: true
+  };
+  postVM: PostVM = {
+    id: '',
+    title: '',
+    body: '',
+    created: new Date(Date.now()),
+    updated: new Date(Date.now()),
+    isPrivate: true
   };
   modalRef?: BsModalRef;
   postId: string | null = null;
@@ -27,25 +38,25 @@ export class PostComponent implements OnInit {
   
   constructor(private apiCallsService: ApiCallsService, 
     private bsModalService: BsModalService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private router: Router) { }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params: ParamMap) => {
-      this.postId = params.get('id');
+    this.postId = this.route.snapshot.paramMap.get('id');
 
-      if (this.postId !== null) {
+    if (this.postId !== null) {
         this.apiCallsService.getPostById(this.postId).subscribe(response => {
-          this.postAddEditVM = response;
-        });
+          this.postVM = response;
 
-        this.postForm.setValue({
-          postTitle: this.postAddEditVM.title,
-          postBody: this.postAddEditVM.body,
+          this.postForm.setValue({
+            postTitle: this.postVM.title,
+            postBody: this.postVM.body,
+            postIsPrivate: this.postVM.isPrivate
+          });
         });
-      } else {
-        this.editMode = true;
-      }
-    });
+    } else {
+      this.editMode = true;
+    }
   }
 
   toggleEditMode() {
@@ -59,23 +70,23 @@ export class PostComponent implements OnInit {
   onSubmit() {
     this.postAddEditVM.title = this.postForm.get('postTitle')?.value;
     this.postAddEditVM.body = this.postForm.get('postBody')?.value;
+    this.postAddEditVM.isPrivate = this.postForm.get('postIsPrivate')?.value;
     this.postAddEditVM.updated = new Date(Date.now());
     if (this.postId == null) {
       this.postAddEditVM.created = new Date(Date.now());
       this.apiCallsService.createPost(this.postAddEditVM).subscribe(response => {
-        console.log(response);
+        this.router.navigate(['/posts', response]);
       });
     } else {
-      this.apiCallsService.updatePost(this.postId, this.postAddEditVM).subscribe(response => {
-        console.log(response);
-      });
+      this.apiCallsService.updatePost(this.postId, this.postAddEditVM).subscribe();
     }
   }
 
   deletePost() {
     if (this.postId != null) {
-      this.apiCallsService.deletePost(this.postId).subscribe(response => {
-        console.log(response);
+      this.apiCallsService.deletePost(this.postId).subscribe(() => {
+        this.modalRef?.hide();
+        this.router.navigate(['/posts']);
       });
     }
   }

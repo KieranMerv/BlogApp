@@ -17,7 +17,8 @@ namespace dotnet_BlogApp.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Body = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Updated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Updated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsPrivate = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

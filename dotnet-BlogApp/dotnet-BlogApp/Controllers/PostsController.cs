@@ -30,7 +30,7 @@ namespace dotnet_BlogApp.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Post>> GetPostById([FromRoute] Guid id)
         {
-            if (_unitOfWork.PostRepo.GetAll() == null) return NotFound();
+            if ((await _unitOfWork.PostRepo.GetAll()) == null) return NotFound();
 
             var post = await _unitOfWork.PostRepo.GetById(id);
 
@@ -41,16 +41,17 @@ namespace dotnet_BlogApp.Controllers
 
         // Create: POST New Post [Complete]
         [HttpPost]
-        public async Task<ActionResult> CreatePost([FromBody] PostVM postVM)
+        public async Task<ActionResult> CreatePost([FromBody] PostAddEditVM postAddEditVM)
         {
-            if (_unitOfWork.PostRepo.GetAll() == null) return Problem("Post Repository is null. Please contact administrator.");
+            if ((await _unitOfWork.PostRepo.GetAll()) == null) return Problem("Post Repository is null. Please contact administrator.");
 
             var post = new Post()
             {
-                Title = postVM.Title,
-                Body = postVM.Body,
-                Created = postVM.Created,
-                Updated = postVM.Updated
+                Title = postAddEditVM.Title,
+                Body = postAddEditVM.Body,
+                Created = postAddEditVM.Created,
+                Updated = postAddEditVM.Updated,
+                IsPrivate = postAddEditVM.IsPrivate
             };
 
             post.Id = Guid.NewGuid();
@@ -61,20 +62,20 @@ namespace dotnet_BlogApp.Controllers
 
             if (saveAsyncInt <= 0) return BadRequest("An error occurred. Changes were not saved.");
 
-            return CreatedAtAction(nameof(GetPostById), new {id = post.Id});
+            return CreatedAtAction(nameof(GetPostById), new {id = post.Id}, post.Id);
         }
 
         // Update: PUT Existing Post [Complete]
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdatePost([FromBody] PostVM postVM, [FromRoute] Guid id)
+        public async Task<ActionResult> UpdatePost([FromBody] PostAddEditVM postAddEditVM, [FromRoute] Guid id)
         {
-            if (_unitOfWork.PostRepo.GetAll() == null) return Problem("Post Repository is null. Please contact administrator.");
+            if ((await _unitOfWork.PostRepo.GetAll()) == null) return Problem("Post Repository is null. Please contact administrator.");
 
             var post = await _unitOfWork.PostRepo.GetById(id);
 
             if (post == null) return NotFound();
 
-            _unitOfWork.PostRepo.Update(postVM, post);
+            _unitOfWork.PostRepo.Update(postAddEditVM, post);
 
             var saveAsyncInt = await _unitOfWork.SaveAsync();
 
@@ -87,7 +88,7 @@ namespace dotnet_BlogApp.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeletePost([FromRoute] Guid id)
         {
-            if (_unitOfWork.PostRepo.GetAll() == null) return NotFound();
+            if ((await _unitOfWork.PostRepo.GetAll()) == null) return NotFound();
 
             var post = await _unitOfWork.PostRepo.GetById(id);
 
