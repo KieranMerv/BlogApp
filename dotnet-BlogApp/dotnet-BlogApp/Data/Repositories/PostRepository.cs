@@ -34,7 +34,8 @@ namespace dotnet_BlogApp.Data.Repositories
             if (post.Body != postVM.Body) post.Title = postVM.Title;
             if (post.Updated != postVM.Updated) post.Updated = postVM.Updated;
 
-            _context.Posts.Update(post);
+            // Not needed! Causes concurrency problems.
+            // _context.Posts.Update(post);
         }
 
         public void Delete(Post post)

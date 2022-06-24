@@ -6,7 +6,7 @@ import { PostComponent } from './posts/post/post.component';
 import { PostsComponent } from './posts/posts.component';
 
 const routes: Routes = [
-  {path: 'home', component: HomeComponent},
+  {path: '', component: HomeComponent},
   {path: 'posts', component: PostsComponent, pathMatch: 'full'},
   {path: 'posts/new', component: PostComponent, pathMatch: 'full'},
   {path: 'posts/:id', component: PostComponent},

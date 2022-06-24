@@ -30,7 +30,7 @@ namespace dotnet_BlogApp.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Post>> GetPostById([FromRoute] Guid id)
         {
-            if (_unitOfWork.PostRepo.GetAll() == null) return NotFound();
+            if ((await _unitOfWork.PostRepo.GetAll()) == null) return NotFound();
 
             var post = await _unitOfWork.PostRepo.GetById(id);
 
@@ -43,7 +43,7 @@ namespace dotnet_BlogApp.Controllers
         [HttpPost]
         public async Task<ActionResult> CreatePost([FromBody] PostVM postVM)
         {
-            if (_unitOfWork.PostRepo.GetAll() == null) return Problem("Post Repository is null. Please contact administrator.");
+            if ((await _unitOfWork.PostRepo.GetAll()) == null) return Problem("Post Repository is null. Please contact administrator.");
 
             var post = new Post()
             {
@@ -68,7 +68,7 @@ namespace dotnet_BlogApp.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdatePost([FromBody] PostVM postVM, [FromRoute] Guid id)
         {
-            if (_unitOfWork.PostRepo.GetAll() == null) return Problem("Post Repository is null. Please contact administrator.");
+            if ((await _unitOfWork.PostRepo.GetAll()) == null) return Problem("Post Repository is null. Please contact administrator.");
 
             var post = await _unitOfWork.PostRepo.GetById(id);
 
@@ -87,7 +87,7 @@ namespace dotnet_BlogApp.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeletePost([FromRoute] Guid id)
         {
-            if (_unitOfWork.PostRepo.GetAll() == null) return NotFound();
+            if ((await _unitOfWork.PostRepo.GetAll()) == null) return NotFound();
 
             var post = await _unitOfWork.PostRepo.GetById(id);
 
