@@ -1,9 +1,10 @@
 ﻿using dotnet_BlogApp.Models.Domain;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace dotnet_BlogApp.Data
 {
-    public class BlogDbContext : DbContext
+    public class BlogDbContext : IdentityDbContext
     {
 #pragma warning disable CS8618
         public BlogDbContext(DbContextOptions<BlogDbContext> options) : base(options) { }
