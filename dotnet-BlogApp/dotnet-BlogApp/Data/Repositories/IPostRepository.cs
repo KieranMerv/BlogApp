@@ -5,7 +5,8 @@ namespace dotnet_BlogApp.Data.Repositories
 {
     public interface IPostRepository
     {
-        Task<IEnumerable<Post>> GetAll();
+        Task<IEnumerable<Post>> GetAllPublicPosts();
+        Task<IEnumerable<Post>> GetAllUserPosts(string userId);
         Task<Post?> GetById(Guid Id);
         Task Add(Post post);
         void Update(PostAddEditVM postAddEditVM, Post post);

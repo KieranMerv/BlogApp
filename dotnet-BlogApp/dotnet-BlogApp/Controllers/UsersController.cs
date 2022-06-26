@@ -1,6 +1,7 @@
 ﻿using dotnet_BlogApp.Models.Domain;
 using dotnet_BlogApp.Models.View;
 using dotnet_BlogApp.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,7 +29,7 @@ namespace dotnet_BlogApp.Controllers
         }
 
         // Read: Login User
-        [HttpPost]
+        [HttpPost("login")]
         public async Task<ActionResult<ReturnAppUserVM>> LoginAppUser(LoginAppUserVM loginAppUserVM)
         {
             var loginAppUser = await _userManager.FindByEmailAsync(loginAppUserVM.Email);
@@ -49,8 +50,17 @@ namespace dotnet_BlogApp.Controllers
             return Ok(newReturnUserVM);
         }
 
+        // Read: Logout User
+        [HttpPost("logout")]
+        public async Task<ActionResult> ActionResult()
+        {
+            await _signInManager.SignOutAsync();
+
+            return Ok("User logged out.");
+        }
+
         // Create: Register User
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<ActionResult<ReturnAppUserVM>> CreateAppUser(RegisterAppUserVM registerUserVM)
         {
             if (await _userManager.FindByEmailAsync(registerUserVM.Email) != null) 
@@ -97,7 +107,7 @@ namespace dotnet_BlogApp.Controllers
         }
 
         // Update: Update User
-        [HttpPut]
+        [HttpPut("update")]
         public async Task<ActionResult<ReturnAppUserVM>> UpdateAppUser(UpdateAppUserVM updateAppUserVM)
         {
             var updateAppUser = await _userManager.FindByEmailAsync(updateAppUserVM.Email);
@@ -133,11 +143,20 @@ namespace dotnet_BlogApp.Controllers
             if (!result.Succeeded)
                 return BadRequest(result.Errors);
 
-            return Ok("User updated");
+            updateAppUser = await _userManager.FindByEmailAsync(updateAppUser.Email);
+
+            var updatedReturnUserVM = new ReturnAppUserVM
+            {
+                UserName = updateAppUser.UserName,
+                Token = await _tokenService.CreateTokenAsync(updateAppUser),
+                Alias = updateAppUser.Alias
+            };
+
+            return Ok(updatedReturnUserVM);
         }
 
         // Delete: Delete User
-        [HttpDelete]
+        [HttpDelete("delete")]
         public async Task<ActionResult> DeleteAppUser([FromBody] DeleteAppUserVM deleteAppUserVM)
         {
             var deleteAppUser = await _userManager.FindByEmailAsync(deleteAppUserVM.Email);

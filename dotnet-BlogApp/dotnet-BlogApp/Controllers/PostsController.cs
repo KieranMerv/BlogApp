@@ -1,8 +1,11 @@
 ﻿using dotnet_BlogApp.Data.Repositories;
 using dotnet_BlogApp.Models.Domain;
 using dotnet_BlogApp.Models.View;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace dotnet_BlogApp.Controllers
 {
@@ -11,17 +14,34 @@ namespace dotnet_BlogApp.Controllers
     public class PostsController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
-        public PostsController(IUnitOfWork unitOfWork)
+        private readonly UserManager<AppUser> _userManager;
+        public PostsController(
+            IUnitOfWork unitOfWork,
+            UserManager<AppUser> userManager)
         {
             _unitOfWork = unitOfWork;
+            _userManager = userManager;
         }
 
         // Read: Get All Public Posts
+        [HttpGet("public")]
+        public async Task<ActionResult<IEnumerable<Post>>> GetAllPublicPosts()
+        {
+            var posts = await _unitOfWork.PostRepo.GetAllPublicPosts();
+
+            if (posts == null) return NotFound();
+
+            return Ok(posts);
+        }
 
         // Read: GET All Posts of Current User
-        public async Task<ActionResult<IEnumerable<Post>>> GetPosts()
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<Post>>> GetUserPosts()
         {
-            var posts = await _unitOfWork.PostRepo.GetAll();
+            var currentUserEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            var currentUser = await _userManager.FindByEmailAsync(currentUserEmail);
+
+            var posts = await _unitOfWork.PostRepo.GetAllUserPosts(currentUser.Id);
 
             if (posts == null) return NotFound();
 
@@ -29,10 +49,14 @@ namespace dotnet_BlogApp.Controllers
         }
 
         // Read: GET Post [Complete]
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<Post>> GetPostById([FromRoute] Guid id)
         {
-            if ((await _unitOfWork.PostRepo.GetAll()) == null) return NotFound();
+            var currentUserEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            var currentUser = await _userManager.FindByEmailAsync(currentUserEmail);
+
+            if ((await _unitOfWork.PostRepo.GetAllUserPosts(currentUser.Id)) == null) return NotFound();
 
             var post = await _unitOfWork.PostRepo.GetById(id);
 
@@ -42,18 +66,23 @@ namespace dotnet_BlogApp.Controllers
         }
 
         // Create: POST New Post [Complete]
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<string>> CreatePost([FromBody] PostAddEditVM postAddEditVM)
         {
-            if ((await _unitOfWork.PostRepo.GetAll()) == null) return Problem("Post Repository is null. Please contact administrator.");
+            var currentUserEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            var currentUser = await _userManager.FindByEmailAsync(currentUserEmail);
+
+            if ((await _unitOfWork.PostRepo.GetAllUserPosts(currentUser.Id)) == null) return Problem("Post Repository is null. Please contact administrator.");
 
             var post = new Post()
             {
                 Title = postAddEditVM.Title,
                 Body = postAddEditVM.Body,
-                Created = postAddEditVM.Created,
-                Updated = postAddEditVM.Updated,
-                IsPrivate = postAddEditVM.IsPrivate
+                Created = DateTime.Now,
+                Updated = DateTime.Now,
+                IsPrivate = postAddEditVM.IsPrivate,
+                AppUserId = currentUser.Id
             };
 
             post.Id = Guid.NewGuid();
@@ -68,10 +97,14 @@ namespace dotnet_BlogApp.Controllers
         }
 
         // Update: PUT Existing Post [Complete]
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult<string>> UpdatePost([FromBody] PostAddEditVM postAddEditVM, [FromRoute] Guid id)
         {
-            if ((await _unitOfWork.PostRepo.GetAll()) == null) return Problem("Post Repository is null. Please contact administrator.");
+            var currentUserEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            var currentUser = await _userManager.FindByEmailAsync(currentUserEmail);
+
+            if ((await _unitOfWork.PostRepo.GetAllUserPosts(currentUser.Id)) == null) return Problem("Post Repository is null. Please contact administrator.");
 
             var post = await _unitOfWork.PostRepo.GetById(id);
 
@@ -87,10 +120,14 @@ namespace dotnet_BlogApp.Controllers
         }
 
         // Delete: DELETE Existing Post [Complete]
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult<string>> DeletePost([FromRoute] Guid id)
         {
-            if ((await _unitOfWork.PostRepo.GetAll()) == null) return NotFound();
+            var currentUserEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            var currentUser = await _userManager.FindByEmailAsync(currentUserEmail);
+
+            if ((await _unitOfWork.PostRepo.GetAllUserPosts(currentUser.Id)) == null) return NotFound();
 
             var post = await _unitOfWork.PostRepo.GetById(id);
 

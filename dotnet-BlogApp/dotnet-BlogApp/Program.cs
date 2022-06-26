@@ -58,6 +58,8 @@ app.UseCors(policy => policy.AllowAnyHeader()
 
 await SeedDatabase();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();

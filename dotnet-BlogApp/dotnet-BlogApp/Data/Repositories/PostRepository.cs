@@ -13,9 +13,14 @@ namespace dotnet_BlogApp.Data.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Post>> GetAll()
+        public async Task<IEnumerable<Post>> GetAllPublicPosts()
         {
-            return await _context.Posts.ToListAsync();
+            return await _context.Posts.Where(post => post.IsPrivate == false).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Post>> GetAllUserPosts(string userId)
+        {
+            return await _context.Posts.Where(post => post.AppUserId == userId).ToListAsync();
         }
 
         public async Task<Post?> GetById(Guid id)
