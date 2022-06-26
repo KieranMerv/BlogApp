@@ -1,4 +1,5 @@
 ﻿using dotnet_BlogApp.Models.Domain;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace dotnet_BlogApp.Data.DbInitializer
@@ -6,14 +7,26 @@ namespace dotnet_BlogApp.Data.DbInitializer
     public class DbInitializer : IDbInitializer
     {
         private readonly BlogDbContext _context;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly RoleManager<AppRole> _roleManager;
+        private readonly IConfiguration _configuration;
         private readonly ILogger<DbInitializer> _logger;
-        public DbInitializer(BlogDbContext context, ILogger<DbInitializer> logger)
+        public DbInitializer(
+            BlogDbContext context,
+            UserManager<AppUser> userManager,
+            RoleManager<AppRole> roleManager,
+            IConfiguration configuration,
+            ILogger<DbInitializer> logger)
         {
             _context = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
+            _configuration = configuration;
             _logger = logger;
         }
         public async Task Initialize()
         {
+            // Update Database
             try
             {
                 if ((await _context.Database.GetPendingMigrationsAsync()).Count() > 0)
@@ -31,12 +44,41 @@ namespace dotnet_BlogApp.Data.DbInitializer
                 return;
             }
 
+            // Seed AppUserRoles
+            await _roleManager.CreateAsync(new AppRole("NormalAppUser"));
+            await _roleManager.CreateAsync(new AppRole("AdminAppUser"));
+
+            // Seed Users
+            var appUser1 = new AppUser
+            {
+                UserName = "JohnDoe1",
+                Email = "johndoe1@gmail.com",
+                Alias = "jdoe1"
+            };
+
+            var appUser2 = new AppUser
+            {
+                UserName = "AdminAppUser",
+                Email = "adminappuser@gmail.com",
+                Alias = "AlmightyAdmin"
+            };
+
+            await _userManager.CreateAsync(appUser1, _configuration.GetSection("SeedUsersPassword")["johndoe"]);
+            await _userManager.CreateAsync(appUser2, _configuration.GetSection("SeedUsersPassword")["adminappuser"]);
+
+            appUser1 = await _userManager.FindByEmailAsync(appUser1.Email);
+            appUser2 = await _userManager.FindByEmailAsync(appUser2.Email);
+
+            await _userManager.AddToRoleAsync(appUser1, "NormalAppUser");
+            await _userManager.AddToRoleAsync(appUser2, "AdminAppUser");
+
+            // Seed Posts
             var postArraySeed = new Post[]
             {
                 new Post()
                 {
                     Id = Guid.NewGuid(),
-                    Title = "First Blog Post",
+                    Title = "First Blog Post (From Admin)",
                     Body = "This is the first blog post seeded into this application just to fill it up with content so that the User Interface can be shown. " +
                     "It is just a simple application, made from several days of hard work from an aspiring Angular / .Net developer. There is much to be improved on. " +
                     "The main purpose of this app, however, is just as a portfolio and not meant to be a super-scaled production application. " +
@@ -45,7 +87,8 @@ namespace dotnet_BlogApp.Data.DbInitializer
                     "The rest of the seed posts will just be Lorem Ipsum because I don't want to spend too much time manually generating data to seed this.",
                     Created = DateTime.Parse("16 May 2016"),
                     Updated = DateTime.Parse("28 Dec 2017"),
-                    IsPrivate = false
+                    IsPrivate = false,
+                    AppUserId = appUser2.Id
                 },
                 new Post()
                 {
@@ -61,7 +104,8 @@ namespace dotnet_BlogApp.Data.DbInitializer
                     "Vel voluptatem doloribus quo eveniet quidem et consectetur quae est voluptatum corporis rem nulla reiciendis vel distinctio voluptas",
                     Created = DateTime.Parse("5 Jun 2018"),
                     Updated = DateTime.Parse("6 Jun 2018"),
-                    IsPrivate = false
+                    IsPrivate = false,
+                    AppUserId = appUser1.Id
                 },
                 new Post()
                 {
@@ -78,7 +122,8 @@ namespace dotnet_BlogApp.Data.DbInitializer
                     "Et reiciendis veritatis qui officia dolore hic vero minima non omnis magnam At ratione earum et quisquam totam a eaque deleniti!",
                     Created = DateTime.Parse("11 Jul 2018"),
                     Updated = DateTime.Parse("15 Jul 2018"),
-                    IsPrivate = false
+                    IsPrivate = false,
+                    AppUserId = appUser1.Id
                 },
                 new Post()
                 {
@@ -95,7 +140,8 @@ namespace dotnet_BlogApp.Data.DbInitializer
                     "Non esse provident id galisum porro et provident doloremque.",
                     Created = DateTime.Parse("21 Jul 2018"),
                     Updated = DateTime.Parse("21 Jul 2018"),
-                    IsPrivate = false
+                    IsPrivate = false,
+                    AppUserId = appUser1.Id
                 },
                 new Post()
                 {
@@ -111,7 +157,8 @@ namespace dotnet_BlogApp.Data.DbInitializer
                     "Quo nesciunt quia sit accusamus provident est suscipit voluptatum a pariatur atque et sapiente mollitia et quia voluptatem?",
                     Created = DateTime.Parse("24 Jun 2022"),
                     Updated = DateTime.Parse("24 Jun 2022"),
-                    IsPrivate = false
+                    IsPrivate = false,
+                    AppUserId = appUser1.Id
                 },
                 new Post()
                 {
@@ -127,7 +174,8 @@ namespace dotnet_BlogApp.Data.DbInitializer
                     "33 sunt debitis sit dolores architecto sed alias eligendi sit aliquam molestiae et dolorem tenetur est corrupti sint in quidem incidunt.",
                     Created = DateTime.Parse("24 Jun 2022"),
                     Updated = DateTime.Parse("24 Jun 2022"),
-                    IsPrivate = true
+                    IsPrivate = true,
+                    AppUserId = appUser1.Id
                 },
                 new Post()
                 {
@@ -142,7 +190,8 @@ namespace dotnet_BlogApp.Data.DbInitializer
                     "A aperiam consectetur cum nihil perferendis ducimus aliquam ut libero culpa.",
                     Created = DateTime.Parse("24 Jun 2022"),
                     Updated = DateTime.Parse("24 Jun 2022"),
-                    IsPrivate = true
+                    IsPrivate = true,
+                    AppUserId = appUser1.Id
                 },
                 new Post()
                 {
@@ -157,7 +206,8 @@ namespace dotnet_BlogApp.Data.DbInitializer
                     "Et voluptas consequatur eum sapiente dolor sit reprehenderit omnis non deleniti optio eos quibusdam autem? Ut alias consequatur ut illum esse est autem nobis est perspiciatis dolor.",
                     Created = DateTime.Parse("24 Jun 2022"),
                     Updated = DateTime.Parse("24 Jun 2022"),
-                    IsPrivate = true
+                    IsPrivate = true,
+                    AppUserId = appUser1.Id
                 },
                 new Post()
                 {
@@ -175,7 +225,8 @@ namespace dotnet_BlogApp.Data.DbInitializer
                     "Ut voluptatem quia hic voluptas sed consectetur veritatis et quia nihil quo fugiat aspernatur nam deserunt dolor.",
                     Created = DateTime.Parse("24 Jun 2022"),
                     Updated = DateTime.Parse("24 Jun 2022"),
-                    IsPrivate = true
+                    IsPrivate = true,
+                    AppUserId = appUser1.Id
                 },
                 new Post()
                 {
@@ -190,11 +241,12 @@ namespace dotnet_BlogApp.Data.DbInitializer
                     "Aut quae dolore aut voluptate libero ab odit doloremque sit nihil harum. Est adipisci consequuntur non magnam voluptas in deleniti molestias.",
                     Created = DateTime.Parse("24 Jun 2022"),
                     Updated = DateTime.Parse("24 Jun 2022"),
-                    IsPrivate = true
+                    IsPrivate = true,
+                    AppUserId = appUser1.Id
                 }
             };
-
-            await _context.AddRangeAsync(postArraySeed);
+            
+            await _context.Posts.AddRangeAsync(postArraySeed);
 
             await _context.SaveChangesAsync();
         }

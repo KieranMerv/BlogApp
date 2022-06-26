@@ -79,7 +79,7 @@ namespace dotnet_BlogApp.Controllers
                 Alias = newAppUser.Alias
             };
 
-            var roleResult = await _userManager.AddToRoleAsync(newAppUser, "normalAppUser");
+            var roleResult = await _userManager.AddToRoleAsync(newAppUser, "NormalAppUser");
 
             if (!roleResult.Succeeded) 
             {
@@ -87,7 +87,7 @@ namespace dotnet_BlogApp.Controllers
                     .Append(new IdentityError 
                     { 
                         Code = "Custom", 
-                        Description = "User was added but normalAppUser role could not be assigned." 
+                        Description = "User was added but NormalAppUser role could not be assigned." 
                     });
                 
                 return BadRequest(roleResult.Errors);

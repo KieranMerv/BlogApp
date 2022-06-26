@@ -9,6 +9,7 @@
         public DateTime Updated { get; set; } = DateTime.UtcNow;
         public bool IsPrivate { get; set; } = true;
 
+        public string? AppUserId { get; set; }
         public AppUser? AppUser { get; set; }
     }
 }
