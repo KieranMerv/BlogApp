@@ -16,7 +16,9 @@ namespace dotnet_BlogApp.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        // Read: GET All Posts [Complete]
+        // Read: Get All Public Posts
+
+        // Read: GET All Posts of Current User
         public async Task<ActionResult<IEnumerable<Post>>> GetPosts()
         {
             var posts = await _unitOfWork.PostRepo.GetAll();
@@ -41,7 +43,7 @@ namespace dotnet_BlogApp.Controllers
 
         // Create: POST New Post [Complete]
         [HttpPost]
-        public async Task<ActionResult> CreatePost([FromBody] PostAddEditVM postAddEditVM)
+        public async Task<ActionResult<string>> CreatePost([FromBody] PostAddEditVM postAddEditVM)
         {
             if ((await _unitOfWork.PostRepo.GetAll()) == null) return Problem("Post Repository is null. Please contact administrator.");
 
@@ -67,7 +69,7 @@ namespace dotnet_BlogApp.Controllers
 
         // Update: PUT Existing Post [Complete]
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdatePost([FromBody] PostAddEditVM postAddEditVM, [FromRoute] Guid id)
+        public async Task<ActionResult<string>> UpdatePost([FromBody] PostAddEditVM postAddEditVM, [FromRoute] Guid id)
         {
             if ((await _unitOfWork.PostRepo.GetAll()) == null) return Problem("Post Repository is null. Please contact administrator.");
 
@@ -81,12 +83,12 @@ namespace dotnet_BlogApp.Controllers
 
             if (saveAsyncInt <= 0) return BadRequest("An error occurred. Changes were not saved.");
 
-            return NoContent();
+            return Ok("Post updated.");
         }
 
         // Delete: DELETE Existing Post [Complete]
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeletePost([FromRoute] Guid id)
+        public async Task<ActionResult<string>> DeletePost([FromRoute] Guid id)
         {
             if ((await _unitOfWork.PostRepo.GetAll()) == null) return NotFound();
 
@@ -100,7 +102,7 @@ namespace dotnet_BlogApp.Controllers
 
             if (saveAsyncInt <= 0) return BadRequest("An error occurred. Changes were not saved.");
 
-            return NoContent();
+            return Ok("Post deleted.");
         }
     }
 }

@@ -23,8 +23,8 @@ namespace dotnet_BlogApp.Services
             // Claims to put in Jwt
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.NameId, appUser.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.UniqueName, appUser.UserName)
+                new Claim(JwtRegisteredClaimNames.NameId, appUser.Id),
+                new Claim(JwtRegisteredClaimNames.Email, appUser.Email)
             };
 
             // Added for Microsoft Identity Roles
