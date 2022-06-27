@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TabsModule } from 'ngx-bootstrap/tabs';
@@ -18,6 +19,7 @@ import { LoginRegisterComponent } from './home/login-register/login-register.com
 import { LoginFormComponent } from './home/login-register/login-form/login-form.component';
 import { RegisterFormComponent } from './home/login-register/register-form/register-form.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -35,10 +37,12 @@ import { UserDetailsComponent } from './user-details/user-details.component';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
     ModalModule.forRoot(),
     TabsModule.forRoot(),
+    ToastrModule.forRoot(),
     ReactiveFormsModule
   ],
   providers: [

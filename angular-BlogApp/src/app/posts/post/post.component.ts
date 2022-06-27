@@ -2,6 +2,7 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { ToastrService } from 'ngx-toastr';
 import { PostAddEditVM } from 'src/app/_models/post-addeditVM.model';
 import { PostVM } from 'src/app/_models/post-VM.model';
 import { ApiCallsService } from 'src/app/_services/api-calls.service';
@@ -39,7 +40,8 @@ export class PostComponent implements OnInit {
   constructor(private apiCallsService: ApiCallsService, 
     private bsModalService: BsModalService,
     private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router,
+    private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.postId = this.route.snapshot.paramMap.get('id');
@@ -74,19 +76,35 @@ export class PostComponent implements OnInit {
     this.postAddEditVM.updated = new Date(Date.now());
     if (this.postId == null) {
       this.postAddEditVM.created = new Date(Date.now());
-      this.apiCallsService.createPost(this.postAddEditVM).subscribe(response => {
-        this.router.navigate(['/posts', response]);
+      this.apiCallsService.createPost(this.postAddEditVM).subscribe({
+        next: response => {
+          this.toastr.success('New post created!');
+          this.router.navigate(['/posts', response]);
+        },
+        error: error => {
+          console.log(error);
+          this.toastr.error('New post creation failed.');
+        }
       });
     } else {
-      this.apiCallsService.updatePost(this.postId, this.postAddEditVM).subscribe();
+      this.apiCallsService.updatePost(this.postId, this.postAddEditVM).subscribe(() => {
+        this.toastr.success('Post updated!');
+      });
     }
   }
 
   deletePost() {
     if (this.postId != null) {
-      this.apiCallsService.deletePost(this.postId).subscribe(() => {
-        this.modalRef?.hide();
-        this.router.navigate(['/posts']);
+      this.apiCallsService.deletePost(this.postId).subscribe({
+        next: () => {
+          this.modalRef?.hide();
+          this.toastr.success('Post deleted!');
+          this.router.navigate(['/posts']);
+        },
+        error: error => {
+          console.log(error);
+          this.toastr.error('Post deletion failed.');
+        }
       });
     }
   }

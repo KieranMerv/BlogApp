@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { CustomValidators } from 'src/app/_helper/custom-validators.helper';
 import { UserRegisterVM } from 'src/app/_models/user-registerVM.model';
 import { UsersApiCallsService } from 'src/app/_services/users-api-calls.service';
@@ -29,7 +30,9 @@ export class RegisterFormComponent implements OnInit {
     confirmPassword: ''
   }
 
-  constructor(private usersApiCallsService: UsersApiCallsService, private router: Router) { }
+  constructor(private usersApiCallsService: UsersApiCallsService, 
+    private router: Router,
+    private toastr: ToastrService) { }
 
   ngOnInit(): void {
   }
@@ -41,8 +44,15 @@ export class RegisterFormComponent implements OnInit {
     this.userRegisterVM.password = this.registerForm.get('registerPassword')?.value;
     this.userRegisterVM.confirmPassword = this.registerForm.get('registerConfirmPassword')?.value;
 
-    this.usersApiCallsService.registerUser(this.userRegisterVM).subscribe(() => {
-      this.router.navigate(['/posts']);
+    this.usersApiCallsService.registerUser(this.userRegisterVM).subscribe({
+      next: () => {
+        this.toastr.success('User registered!');
+        this.router.navigate(['/posts']);
+      },
+      error: error => {
+        console.log(error);
+        this.toastr.error('User registration failed.');
+      }
     });
   }
 }

@@ -7,6 +7,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { UserDeleteVM } from '../_models/user-deleteVM.model';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-user-details',
@@ -42,7 +43,8 @@ export class UserDetailsComponent implements OnInit {
   constructor(
     private usersApiCallsService: UsersApiCallsService, 
     private bsModalService: BsModalService,
-    private router: Router) {
+    private router: Router,
+    private toastr: ToastrService) {
       this.usersApiCallsService.currentUser$.pipe(take(1)).subscribe(response => {
         this.currentUser = response;
       });
@@ -82,8 +84,15 @@ export class UserDetailsComponent implements OnInit {
     else
       this.userUpdateVM.newPassword = userNewPassword;
 
-    this.usersApiCallsService.updateUser(this.userUpdateVM).subscribe(() => {
-      this.router.navigate(['/user/details']);
+    this.usersApiCallsService.updateUser(this.userUpdateVM).subscribe({
+      next: () => {
+        this.toastr.success('User updated!');
+        this.router.navigate(['/user/details']);
+      },
+      error: error => {
+        console.log(error);
+        this.toastr.error('User update failed.');
+      }
     });
   }
 
@@ -93,11 +102,19 @@ export class UserDetailsComponent implements OnInit {
         this.userDeleteVM.email = this.usersApiCallsService.getDecodedToken(this.currentUser?.token)['email'];
 
       this.userDeleteVM.password = this.userUpdateForm.get('userPassword')?.value;
-      this.usersApiCallsService.deleteUser(this.userDeleteVM).subscribe(() => {
-        this.modalRef?.hide();
-        this.router.navigate(['/']);
+      this.usersApiCallsService.deleteUser(this.userDeleteVM).subscribe({
+        next: () => {
+          this.modalRef?.hide();
+          this.toastr.success('User deleted!');
+          this.router.navigate(['/']);
+        },
+        error: error => {
+          console.log(error);
+          this.toastr.error('User deletion failed.');
+        }
       });
     } else {
+      this.toastr.error('User deletion failed. Delete confirmation input incorrect.');
       console.log("Deletion of user failed. Delete confirmation input did not match requested value.");
     }
   }
