@@ -14,7 +14,7 @@ export class UsersApiCallsService {
 
   constructor(private http: HttpClient) { }
 
-  login(model: any) {
+  loginUser(model: any) {
     return this.http.post<any>(this.baseUrl + "users/login", model).pipe(
       map((response: User) => {
         const user = response;
@@ -25,7 +25,7 @@ export class UsersApiCallsService {
     );
   }
 
-  logout() {
+  logoutUser() {
     this.http.post<any>(this.baseUrl + "users/logout", null).pipe(
       map((response: any) => {
         console.log(response);
@@ -35,7 +35,7 @@ export class UsersApiCallsService {
     );
   }
 
-  register(model: any) {
+  registerUser(model: any) {
     return this.http.post<any>(this.baseUrl + "users/register", model).pipe(
       map((response: User) => {
         const user = response;
@@ -46,7 +46,7 @@ export class UsersApiCallsService {
     );
   }
 
-  update(model: any) {
+  updateUser(model: any) {
     return this.http.post<any>(this.baseUrl + "users/update", model).pipe(
       map((response: User) => {
         const user = response;
@@ -57,7 +57,7 @@ export class UsersApiCallsService {
     );
   }
 
-  delete(model: any) {
+  deleteUser(model: any) {
     return this.http.delete<any>(this.baseUrl + "users/delete", model).pipe(
       map((response: any) => {
         console.log(response);

@@ -29,7 +29,7 @@ export class LoginFormComponent implements OnInit {
     this.userLoginVM.email = this.loginForm.get('loginEmail')?.value;
     this.userLoginVM.password = this.loginForm.get('loginPassword')?.value;
 
-    this.usersApiCallsService.login(this.userLoginVM).subscribe(() => {
+    this.usersApiCallsService.loginUser(this.userLoginVM).subscribe(() => {
       this.router.navigate(['/posts']);
     });
   }

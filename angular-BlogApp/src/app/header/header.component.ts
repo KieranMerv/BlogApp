@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { User } from '../_models/user.model';
+import { UsersApiCallsService } from '../_services/users-api-calls.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -6,10 +9,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+  currentUser: User | null = null;
 
-  constructor() { }
+  constructor(private usersApiCallsService: UsersApiCallsService) {
+    this.usersApiCallsService.currentUser$.pipe(take(1)).subscribe(response => {
+      this.currentUser = response;
+    });
+  }
 
   ngOnInit(): void {
   }
-
 }

@@ -43,8 +43,8 @@ namespace dotnet_BlogApp.Controllers
             var newReturnUserVM = new ReturnAppUserVM
             {
                 UserName = loginAppUser.UserName,
-                Token = await _tokenService.CreateTokenAsync(loginAppUser),
-                Alias = loginAppUser.Alias
+                Alias = loginAppUser.Alias,
+                Token = await _tokenService.CreateTokenAsync(loginAppUser)
             };
 
             return Ok(newReturnUserVM);
@@ -72,8 +72,8 @@ namespace dotnet_BlogApp.Controllers
             var newAppUser = new AppUser
             {
                 UserName = registerUserVM.UserName,
-                Email = registerUserVM.Email,
-                Alias = registerUserVM.Alias
+                Alias = registerUserVM.Alias,
+                Email = registerUserVM.Email
             };
 
             var result = await _userManager.CreateAsync(newAppUser, registerUserVM.Password);
@@ -85,8 +85,8 @@ namespace dotnet_BlogApp.Controllers
             var newReturnUserVM = new ReturnAppUserVM
             {
                 UserName = newAppUser.UserName,
-                Token = await _tokenService.CreateTokenAsync(newAppUser),
-                Alias = newAppUser.Alias
+                Alias = newAppUser.Alias,
+                Token = await _tokenService.CreateTokenAsync(newAppUser)
             };
 
             var roleResult = await _userManager.AddToRoleAsync(newAppUser, "NormalAppUser");
@@ -148,8 +148,8 @@ namespace dotnet_BlogApp.Controllers
             var updatedReturnUserVM = new ReturnAppUserVM
             {
                 UserName = updateAppUser.UserName,
-                Token = await _tokenService.CreateTokenAsync(updateAppUser),
-                Alias = updateAppUser.Alias
+                Alias = updateAppUser.Alias,
+                Token = await _tokenService.CreateTokenAsync(updateAppUser)
             };
 
             return Ok(updatedReturnUserVM);

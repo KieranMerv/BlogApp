@@ -17,6 +17,7 @@ import { JwtInterceptor } from './_interceptors/jwt.interceptor';
 import { LoginRegisterComponent } from './home/login-register/login-register.component';
 import { LoginFormComponent } from './home/login-register/login-form/login-form.component';
 import { RegisterFormComponent } from './home/login-register/register-form/register-form.component';
+import { UserDetailsComponent } from './user-details/user-details.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { RegisterFormComponent } from './home/login-register/register-form/regis
     FooterComponent,
     LoginRegisterComponent,
     LoginFormComponent,
-    RegisterFormComponent
+    RegisterFormComponent,
+    UserDetailsComponent
   ],
   imports: [
     BrowserModule,

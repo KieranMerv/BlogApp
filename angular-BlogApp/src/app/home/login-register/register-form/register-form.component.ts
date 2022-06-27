@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { CustomValidators } from 'src/app/_helper/custom-validators.helper';
 import { UserRegisterVM } from 'src/app/_models/user-registerVM.model';
 import { UsersApiCallsService } from 'src/app/_services/users-api-calls.service';
 
@@ -16,7 +17,9 @@ export class RegisterFormComponent implements OnInit {
     registerEmail: new FormControl('', [Validators.required, Validators.email]),
     registerPassword: new FormControl('', Validators.required),
     registerConfirmPassword: new FormControl('', Validators.required)
-  });
+    },
+    CustomValidators.passwordMatchConfirm('registerPassword', 'registerConfirmPassword')
+  );
 
   userRegisterVM: UserRegisterVM = {
     userName: '',
@@ -38,7 +41,7 @@ export class RegisterFormComponent implements OnInit {
     this.userRegisterVM.password = this.registerForm.get('registerPassword')?.value;
     this.userRegisterVM.confirmPassword = this.registerForm.get('registerConfirmPassword')?.value;
 
-    this.usersApiCallsService.login(this.userRegisterVM).subscribe(() => {
+    this.usersApiCallsService.registerUser(this.userRegisterVM).subscribe(() => {
       this.router.navigate(['/posts']);
     });
   }
