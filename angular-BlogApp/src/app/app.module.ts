@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { ReactiveFormsModule } from '@angular/forms';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -13,6 +14,9 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './_interceptors/jwt.interceptor';
+import { LoginRegisterComponent } from './home/login-register/login-register.component';
+import { LoginFormComponent } from './home/login-register/login-form/login-form.component';
+import { RegisterFormComponent } from './home/login-register/register-form/register-form.component';
 
 @NgModule({
   declarations: [
@@ -22,13 +26,17 @@ import { JwtInterceptor } from './_interceptors/jwt.interceptor';
     PostComponent,
     NotFoundComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    LoginRegisterComponent,
+    LoginFormComponent,
+    RegisterFormComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     ModalModule.forRoot(),
+    TabsModule.forRoot(),
     ReactiveFormsModule
   ],
   providers: [
