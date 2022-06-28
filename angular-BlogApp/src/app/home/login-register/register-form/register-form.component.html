@@ -1,23 +1,23 @@
-<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="m-5">
   <div class="mb-3">
-    <label for="userNameInput" class="form-label">UserName</label>
-    <input type="text" class="form-control" id="userNameInput" formControlName="registerUserName" />
+    <label for="userNameInputRegister" class="form-label">UserName</label>
+    <input type="text" class="form-control" id="userNameInputRegister" formControlName="registerUserName" />
   </div>
   <div class="mb-3">
-    <label for="aliasInput" class="form-label">Alias</label>
-    <input type="text" class="form-control" id="aliasInput" formControlName="registerAlias" />
+    <label for="aliasInputRegister" class="form-label">Alias</label>
+    <input type="text" class="form-control" id="aliasInputRegister" formControlName="registerAlias" />
   </div>
   <div class="mb-3">
-    <label for="emailInput" class="form-label">Email</label>
-    <input type="text" class="form-control" id="emailInput" formControlName="registerEmail" />
+    <label for="emailInputRegister" class="form-label">Email</label>
+    <input type="text" class="form-control" id="emailInputRegister" formControlName="registerEmail" />
   </div>
   <div class="mb-3">
-    <label for="passwordInput" class="form-label">Password</label>
-    <input type="password" class="form-control" id="passwordInput" formControlName="registerPassword" />
+    <label for="passwordInputRegister" class="form-label">Password</label>
+    <input type="password" class="form-control" id="passwordInputRegister" formControlName="registerPassword" />
   </div>
   <div class="mb-3">
-    <label for="confirmPasswordInput" class="form-label">Confirm Password</label>
-    <input type="password" class="form-control" id="confirmPasswordInput" formControlName="registerConfirmPassword" />
+    <label for="confirmPasswordInputRegister" class="form-label">Confirm Password</label>
+    <input type="password" class="form-control" id="confirmPasswordInputRegister" formControlName="registerConfirmPassword" />
   </div>
   <div class="d-flex justify-content-end">
     <button type="submit" class="btn btn-success">Register</button>

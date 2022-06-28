@@ -15,7 +15,7 @@ export class UsersApiCallsService {
   constructor(private http: HttpClient) { }
 
   loginUser(model: any) {
-    return this.http.post<any>(this.baseUrl + "users/login", model).pipe(
+    return this.http.post<any>(this.baseUrl + "/users/login", model).pipe(
       map((response: User) => {
         const user = response;
         if (user) {
@@ -26,7 +26,7 @@ export class UsersApiCallsService {
   }
 
   logoutUser() {
-    return this.http.post<any>(this.baseUrl + "users/logout", null).pipe(
+    return this.http.post<any>(this.baseUrl + "/users/logout", null).pipe(
       map((response: any) => {
         console.log(response);
         localStorage.removeItem("user");
@@ -36,7 +36,7 @@ export class UsersApiCallsService {
   }
 
   registerUser(model: any) {
-    return this.http.post<any>(this.baseUrl + "users/register", model).pipe(
+    return this.http.post<any>(this.baseUrl + "/users/register", model).pipe(
       map((response: User) => {
         const user = response;
         if (user) {
@@ -47,7 +47,7 @@ export class UsersApiCallsService {
   }
 
   updateUser(model: any) {
-    return this.http.post<any>(this.baseUrl + "users/update", model).pipe(
+    return this.http.post<any>(this.baseUrl + "/users/update", model).pipe(
       map((response: User) => {
         const user = response;
         if (user) {
@@ -58,7 +58,7 @@ export class UsersApiCallsService {
   }
 
   deleteUser(model: any) {
-    return this.http.delete<any>(this.baseUrl + "users/delete", model).pipe(
+    return this.http.delete<any>(this.baseUrl + "/users/delete", model).pipe(
       map((response: any) => {
         console.log(response);
         localStorage.removeItem("user");

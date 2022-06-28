@@ -43,7 +43,7 @@ import { ToastrModule } from 'ngx-toastr';
     ModalModule.forRoot(),
     TabsModule.forRoot(),
     ToastrModule.forRoot({
-      positionClass: 'toast-bottom-left'
+      positionClass: 'toast-bottom-right'
     }),
     ReactiveFormsModule
   ],

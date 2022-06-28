@@ -5,7 +5,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav d-flex justify-content-between">
+      <ul class="w-100 navbar-nav d-flex justify-content-between">
         <div>
           <li class="nav-item">
             <a class="nav-link" routerLink="/" routerLinkActive="active">Home</a>
@@ -18,8 +18,8 @@
           </li>
         </div>
         <div>
-          <li class="nav-item me-3">
-            Welcome{{ currentUser ? ', ' + currentUser.alias + '!' : '! Please log in or register.' }}
+          <li class="nav-item">
+            <span class="nav-link">Welcome{{ currentUser ? ', ' + currentUser.alias + '!' : '! Please log in or register.' }}</span>
           </li>
           <button type="button" class="btn btn-secondary" *ngIf="this.currentUser !== null" (click)="logout()">Logout</button>
         </div>

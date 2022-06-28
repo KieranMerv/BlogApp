@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace dotnet_BlogApp.Data
 {
-    public class BlogDbContext : IdentityDbContext
+    public class BlogDbContext : IdentityDbContext<AppUser, AppRole, string>
     {
 #pragma warning disable CS8618
         public BlogDbContext(DbContextOptions<BlogDbContext> options) : base(options) { }

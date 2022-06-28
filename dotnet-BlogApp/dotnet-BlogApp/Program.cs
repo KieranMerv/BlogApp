@@ -3,6 +3,7 @@ using dotnet_BlogApp.Data.DbInitializer;
 using dotnet_BlogApp.Data.Repositories;
 using dotnet_BlogApp.Models.Domain;
 using dotnet_BlogApp.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -31,7 +32,7 @@ builder.Services
     .AddRoleValidator<RoleValidator<AppRole>>()
     .AddEntityFrameworkStores<BlogDbContext>();
 builder.Services
-    .AddAuthentication()
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => 
     {
         options.TokenValidationParameters = new TokenValidationParameters

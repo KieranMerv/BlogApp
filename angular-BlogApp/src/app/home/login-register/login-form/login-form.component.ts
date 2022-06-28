@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { UserLoginVM } from 'src/app/_models/user-loginVM.model';
 import { UsersApiCallsService } from 'src/app/_services/users-api-calls.service';
 
@@ -20,7 +21,10 @@ export class LoginFormComponent implements OnInit {
     password: ''
   };
 
-  constructor(private usersApiCallsService: UsersApiCallsService, private router: Router) { }
+  constructor(
+    private usersApiCallsService: UsersApiCallsService, 
+    private router: Router,
+    private toastr: ToastrService) { }
 
   ngOnInit(): void {
   }
@@ -29,8 +33,14 @@ export class LoginFormComponent implements OnInit {
     this.userLoginVM.email = this.loginForm.get('loginEmail')?.value;
     this.userLoginVM.password = this.loginForm.get('loginPassword')?.value;
 
-    this.usersApiCallsService.loginUser(this.userLoginVM).subscribe(() => {
-      this.router.navigate(['/posts']);
+    this.usersApiCallsService.loginUser(this.userLoginVM).subscribe({
+      next: () => {
+        this.router.navigate(['/posts']);
+      },
+      error: error => {
+        console.log(error);
+        this.toastr.error("Login failed.");
+      }
     });
   }
 }
