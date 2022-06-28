@@ -61,7 +61,7 @@ export class UsersApiCallsService {
   }
 
   deleteUser(model: any) {
-    return this.http.delete<any>(this.baseUrl + "/users/delete", model).pipe(
+    return this.http.delete<any>(this.baseUrl + "/users/delete", {body: model}).pipe(
       map((response: any) => {
         console.log(response);
         localStorage.removeItem("user");
