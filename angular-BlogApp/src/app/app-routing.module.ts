@@ -8,14 +8,14 @@ import { UserDetailsComponent } from './user-details/user-details.component';
 import { AuthGuard } from './_guards/auth.guard';
 
 const routes: Routes = [
+  {path: '', component: HomeComponent},
   {path:'', runGuardsAndResolvers: 'always', canActivate:[AuthGuard], children:[
-    {path: '', component: HomeComponent},
     {path: 'posts', component: PostsComponent, pathMatch: 'full'},
     {path: 'posts/new', component: PostComponent, pathMatch: 'full'},
-    {path: 'posts/:id', component: PostComponent},
+    {path: 'posts/:id', component: PostComponent, pathMatch: 'full'},
     {path: 'user/details', component: UserDetailsComponent, pathMatch: 'full'},
-    {path: '**', component: NotFoundComponent, pathMatch: 'full'}
-  ]}
+  ]},
+  {path: '**', component: NotFoundComponent, pathMatch: 'full'}
 ];
 
 @NgModule({
