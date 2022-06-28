@@ -34,7 +34,8 @@ export class LoginFormComponent implements OnInit {
     this.userLoginVM.password = this.loginForm.get('loginPassword')?.value;
 
     this.usersApiCallsService.loginUser(this.userLoginVM).subscribe({
-      next: () => {
+      next: response => {
+        console.log(response);
         this.router.navigate(['/posts']);
       },
       error: error => {

@@ -116,7 +116,7 @@ namespace dotnet_BlogApp.Controllers
 
             if (saveAsyncInt <= 0) return BadRequest("An error occurred. Changes were not saved.");
 
-            return Ok("Post updated.");
+            return Accepted();
         }
 
         // Delete: DELETE Existing Post [Complete]
@@ -139,7 +139,7 @@ namespace dotnet_BlogApp.Controllers
 
             if (saveAsyncInt <= 0) return BadRequest("An error occurred. Changes were not saved.");
 
-            return Ok("Post deleted.");
+            return Accepted();
         }
     }
 }

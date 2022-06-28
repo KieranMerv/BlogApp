@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { map, ReplaySubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User } from '../_models/user.model';
@@ -12,7 +14,10 @@ export class UsersApiCallsService {
   private currentUserSource = new ReplaySubject<User|null>(1);
   currentUser$ = this.currentUserSource.asObservable();
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private toastr: ToastrService) { }
 
   loginUser(model: any) {
     return this.http.post<any>(this.baseUrl + "/users/login", model).pipe(
@@ -26,13 +31,11 @@ export class UsersApiCallsService {
   }
 
   logoutUser() {
-    return this.http.post<any>(this.baseUrl + "/users/logout", null).pipe(
-      map((response: any) => {
-        console.log(response);
-        localStorage.removeItem("user");
-        this.currentUserSource.next(null);
-      })
-    );
+    // No need to make a call to server.
+    localStorage.removeItem("user");
+    this.currentUserSource.next(null);
+    this.toastr.success('User logged out.');
+    this.router.navigate(['/']);
   }
 
   registerUser(model: any) {
@@ -47,7 +50,7 @@ export class UsersApiCallsService {
   }
 
   updateUser(model: any) {
-    return this.http.post<any>(this.baseUrl + "/users/update", model).pipe(
+    return this.http.put<any>(this.baseUrl + "/users/update", model).pipe(
       map((response: User) => {
         const user = response;
         if (user) {

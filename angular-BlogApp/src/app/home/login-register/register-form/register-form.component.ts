@@ -45,7 +45,8 @@ export class RegisterFormComponent implements OnInit {
     this.userRegisterVM.confirmPassword = this.registerForm.get('registerConfirmPassword')?.value;
 
     this.usersApiCallsService.registerUser(this.userRegisterVM).subscribe({
-      next: () => {
+      next: (response) => {
+        console.log(response);
         this.toastr.success('User registered!');
         this.router.navigate(['/posts']);
       },

@@ -22,7 +22,7 @@
           <label for="emailInput" class="form-label">Email</label>
           <input type="email" class="form-control" id="emailInput" formControlName="userEmail" readonly />
         </div>
-        <div class="mb-3">
+        <div class="mb-3" *ngIf="editMode">
           <label for="newEmailInput" class="form-label">New Email (Leave empty if not changing email)</label>
           <input type="email" class="form-control" id="newEmailInput" formControlName="userNewEmail"
             [readonly]="!editMode" />

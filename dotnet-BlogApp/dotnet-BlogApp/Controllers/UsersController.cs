@@ -38,7 +38,7 @@ namespace dotnet_BlogApp.Controllers
 
             var result = await _signInManager.CheckPasswordSignInAsync(loginAppUser, loginAppUserVM.Password, false);
 
-            if (!result.Succeeded) return Unauthorized();
+            if (!result.Succeeded) return Unauthorized("Password check failed.");
 
             var newReturnUserVM = new ReturnAppUserVM
             {
@@ -50,14 +50,7 @@ namespace dotnet_BlogApp.Controllers
             return Ok(newReturnUserVM);
         }
 
-        // Read: Logout User
-        [HttpPost("logout")]
-        public async Task<ActionResult> ActionResult()
-        {
-            await _signInManager.SignOutAsync();
-
-            return Ok("User logged out.");
-        }
+        // Read: Logout User not needed for JWT
 
         // Create: Register User
         [HttpPost("register")]
@@ -107,6 +100,7 @@ namespace dotnet_BlogApp.Controllers
         }
 
         // Update: Update User
+        [Authorize]
         [HttpPut("update")]
         public async Task<ActionResult<ReturnAppUserVM>> UpdateAppUser(UpdateAppUserVM updateAppUserVM)
         {
@@ -116,7 +110,7 @@ namespace dotnet_BlogApp.Controllers
                 return BadRequest("User with this email does not exist.");
 
             // Verify password
-            if (await _userManager.CheckPasswordAsync(updateAppUser, updateAppUserVM.Password))
+            if (await _userManager.CheckPasswordAsync(updateAppUser, updateAppUserVM.Password) == false)
                 return Unauthorized("Password incorrect, unable to update current user.");
 
             // Check and update individual fields
@@ -156,6 +150,7 @@ namespace dotnet_BlogApp.Controllers
         }
 
         // Delete: Delete User
+        [Authorize]
         [HttpDelete("delete")]
         public async Task<ActionResult> DeleteAppUser([FromBody] DeleteAppUserVM deleteAppUserVM)
         {

@@ -17,8 +17,8 @@
           <p class="card-text text-justify">{{ post.body }}</p>
           <div class="d-flex justify-content-between align-items-end">
             <div class="mt-5">
-              <small class="d-block">Updated: {{ post.updated | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>
-              <small class="d-block">Created: {{ post.created | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>
+              <small class="d-block text-secondary opacity-50 fs-5">Updated: {{ post.updated | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>
+              <small class="d-block text-secondary opacity-50 fs-5">Created: {{ post.created | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>
             </div>
             <div>
               <a routerLink="/posts/{{post.id}}" class="btn btn-primary">

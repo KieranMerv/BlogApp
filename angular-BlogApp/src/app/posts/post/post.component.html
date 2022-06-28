@@ -9,7 +9,7 @@
       <form [formGroup]="postForm" (ngSubmit)="onSubmit()">
         <div class="mb-3">
           <label for="titleInput" class="form-label">Post Title</label>
-          <input type="email" class="form-control" id="titleInput" placeholder="name@example.com" formControlName="postTitle" [readonly]="!editMode" />
+          <input type="email" class="form-control" id="titleInput" formControlName="postTitle" [readonly]="!editMode" />
         </div>
         <div class="mb-3">
           <label for="bodyTextarea" class="form-label">Post Content</label>

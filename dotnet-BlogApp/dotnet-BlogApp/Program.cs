@@ -30,6 +30,7 @@ builder.Services
     .AddRoleManager<RoleManager<AppRole>>()
     .AddSignInManager<SignInManager<AppUser>>()
     .AddRoleValidator<RoleValidator<AppRole>>()
+    .AddDefaultTokenProviders()
     .AddEntityFrameworkStores<BlogDbContext>();
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -40,8 +41,8 @@ builder.Services
             // Server should vaidate token signing key with server's
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["TokenKey"])),
-            ValidateIssuer = true,
-            ValidateAudience = true
+            ValidateIssuer = false,
+            ValidateAudience = false
         };
     });
 builder.Services.AddControllers();
