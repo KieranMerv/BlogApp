@@ -1,14 +1,22 @@
 <main class="my-5 container-fluid">
   <div class="d-flex">
-    <div class="px-5 w-100 mb-5">
-      <h1 class="my-5">Welcome to PrimaryBlog</h1>
-      <h3 class="mb-5">A simple blog, for anyone.</h3>
-      <p class="text-justify">This is a minimalist, simple blog application with basic CRUD operations and authentication powered by
-        Microsoft Identity. It serves as part of the portfolio of Mervin Wee, an aspiring web developer in the midst
-        of a mid-career switch.</p>
-      <p class="text-justify">While care has been taken to make this application secure, it has not undergone industrial testing, so it is
-        not recommended for any sensitive information to be input. Register with a fake email address, or an email
-        address that is just for casual use.</p>
+    <div class="px-5 w-100 mb-5 d-flex">
+      <div>
+        <h1 class="my-5">Welcome to PrimaryBlog</h1>
+        <h3 class="mb-5">A simple blog, for anyone.</h3>
+        <p class="text-justify">This is a minimalist, simple blog application with basic CRUD operations and
+          authentication powered by
+          Microsoft Identity. It serves as part of the portfolio of Mervin Wee, an aspiring web developer in the midst
+          of a mid-career switch.</p>
+        <p class="text-justify">While care has been taken to make this application secure, it has not undergone
+          industrial testing, so it is
+          not recommended for any sensitive information to be input. Register with a fake email address, or an email
+          address that is just for casual use.</p>
+      </div>
+      <div class="w-25">
+        <img class="image-fluid" src="../../assets/HomepageImage.jpg" alt="Homepage Image" />
+        <a class="text-light" href="https://www.vecteezy.com/free-vector/primary">Primary Vectors by Vecteezy</a>
+      </div>
     </div>
     <div class="w-25 border-start border-secondary">
       <app-login-register></app-login-register>
@@ -21,13 +29,17 @@
         <!-- Single Card -->
         <div class="card border-0 shadow my-3 p-5">
           <div class="card-body">
-            <h1 class="card-title mb-5">{{ publicPost.title }}<small class="fs-5">{{ publicPost.isPrivate ? ' [Private]' : ''
+            <h1 class="card-title mb-5">{{ publicPost.title }}<small class="fs-5">{{ publicPost.isPrivate ? ' [Private]'
+                : ''
                 }}</small></h1>
             <p class="card-text text-justify">{{ publicPost.body }}</p>
             <div class="d-flex justify-content-start align-items-end">
               <div class="mt-5">
                 <small class="d-block">Updated: {{ publicPost.updated | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>
                 <small class="d-block">Created: {{ publicPost.created | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>
+              </div>
+              <div class="mt-5">
+                <p>Author: {{ publicPost.authorAlias }}</p>
               </div>
             </div>
           </div>
