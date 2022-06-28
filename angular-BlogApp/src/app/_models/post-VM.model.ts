@@ -5,4 +5,6 @@ export interface PostVM {
   created: Date;
   updated: Date;
   isPrivate: boolean;
+
+  authorAlias: string;
 }

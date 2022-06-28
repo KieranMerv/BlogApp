@@ -1,4 +1,5 @@
-﻿using dotnet_BlogApp.Models.Domain;
+﻿using dotnet_BlogApp.Data.Repositories;
+using dotnet_BlogApp.Models.Domain;
 using dotnet_BlogApp.Models.View;
 using dotnet_BlogApp.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -11,17 +12,20 @@ namespace dotnet_BlogApp.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ITokenService _tokenService;
         private readonly ILogger<UsersController> _logger;
 
         public UsersController(
+            IUnitOfWork unitOfWork,
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
             ITokenService tokenService,
             ILogger<UsersController> logger)
         {
+            _unitOfWork = unitOfWork;
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenService = tokenService;
@@ -159,8 +163,14 @@ namespace dotnet_BlogApp.Controllers
             if (deleteAppUser == null)
                 return Unauthorized("User with this email does not exist.");
 
-            if (await _userManager.CheckPasswordAsync(deleteAppUser, deleteAppUserVM.Password))
+            if (await _userManager.CheckPasswordAsync(deleteAppUser, deleteAppUserVM.Password) == false)
                 return Unauthorized("Password incorrect, unable to delete current user.");
+
+            await _unitOfWork.PostRepo.DeleteAllUserPosts(deleteAppUser.Id);
+            int deleteAllUserPostsResult = await _unitOfWork.SaveAsync();
+            
+            if (deleteAllUserPostsResult > 0)
+                _logger.LogInformation($"All posts deleted for user with ID {deleteAppUser.Id}");
 
             var result = await _userManager.DeleteAsync(deleteAppUser);
 

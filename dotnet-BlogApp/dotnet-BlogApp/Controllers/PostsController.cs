@@ -2,7 +2,6 @@
 using dotnet_BlogApp.Models.Domain;
 using dotnet_BlogApp.Models.View;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -23,20 +22,34 @@ namespace dotnet_BlogApp.Controllers
             _userManager = userManager;
         }
 
-        // Read: Get All Public Posts
+        // Read: Get All Public Posts [Complete]
         [HttpGet("public")]
-        public async Task<ActionResult<IEnumerable<Post>>> GetAllPublicPosts()
+        public async Task<ActionResult<IEnumerable<ReturnPost>>> GetAllPublicPosts()
         {
             var posts = await _unitOfWork.PostRepo.GetAllPublicPosts();
 
             if (posts == null) return NotFound();
 
-            return Ok(posts);
+            var returnPosts = posts.Select(post => new ReturnPost
+            {
+                Id = post.Id,
+                Title = post.Title,
+                Body = post.Body,
+                Created = post.Created,
+                Updated = post.Updated,
+                IsPrivate = post.IsPrivate,
+                AuthorAlias = post.AppUser == null ? "Anonymous"
+                            : (post.AppUser.Alias == "Anonymous" || post.AppUser.Alias == "" || post.AppUser.Alias == null
+                            ? (post.AppUser.UserName == "" || post.AppUser.UserName == null ? "Anonymous"
+                            : post.AppUser.UserName) : post.AppUser.Alias)
+            });
+
+            return Ok(returnPosts);
         }
 
-        // Read: GET All Posts of Current User
+        // Read: GET All Posts of Current User [Complete]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<Post>>> GetUserPosts()
+        public async Task<ActionResult<IEnumerable<ReturnPost>>> GetUserPosts()
         {
             var currentUserEmail = User.FindFirst(ClaimTypes.Email)?.Value;
             var currentUser = await _userManager.FindByEmailAsync(currentUserEmail);
@@ -45,13 +58,27 @@ namespace dotnet_BlogApp.Controllers
 
             if (posts == null) return NotFound();
 
-            return Ok(posts);
+            var returnPosts = posts.Select(post => new ReturnPost
+            {
+                Id = post.Id,
+                Title = post.Title,
+                Body = post.Body,
+                Created = post.Created,
+                Updated = post.Updated,
+                IsPrivate = post.IsPrivate,
+                AuthorAlias = post.AppUser == null ? "Anonymous"
+                            : (post.AppUser.Alias == "Anonymous" || post.AppUser.Alias == "" || post.AppUser.Alias == null
+                            ? (post.AppUser.UserName == "" || post.AppUser.UserName == null ? "Anonymous"
+                            : post.AppUser.UserName) : post.AppUser.Alias)
+            });
+
+            return Ok(returnPosts);
         }
 
         // Read: GET Post [Complete]
         [Authorize]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Post>> GetPostById([FromRoute] Guid id)
+        public async Task<ActionResult<ReturnPost>> GetPostById([FromRoute] Guid id)
         {
             var currentUserEmail = User.FindFirst(ClaimTypes.Email)?.Value;
             var currentUser = await _userManager.FindByEmailAsync(currentUserEmail);
@@ -62,7 +89,21 @@ namespace dotnet_BlogApp.Controllers
 
             if (post == null) return NotFound();
 
-            return Ok(post);
+            var returnPost = new ReturnPost
+            {
+                Id = post.Id,
+                Title = post.Title,
+                Body = post.Body,
+                Created = post.Created,
+                Updated = post.Updated,
+                IsPrivate = post.IsPrivate,
+                AuthorAlias = post.AppUser == null ? "Anonymous"
+                            : (post.AppUser.Alias == "Anonymous" || post.AppUser.Alias == "" || post.AppUser.Alias == null
+                            ? (post.AppUser.UserName == "" || post.AppUser.UserName == null ? "Anonymous"
+                            : post.AppUser.UserName) : post.AppUser.Alias)
+            };
+
+            return Ok(returnPost);
         }
 
         // Create: POST New Post [Complete]

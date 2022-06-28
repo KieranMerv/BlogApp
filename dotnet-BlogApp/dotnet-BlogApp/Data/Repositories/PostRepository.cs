@@ -15,17 +15,27 @@ namespace dotnet_BlogApp.Data.Repositories
 
         public async Task<IEnumerable<Post>> GetAllPublicPosts()
         {
-            return await _context.Posts.Where(post => post.IsPrivate == false).ToListAsync();
+            return await _context.Posts
+                    .Include(x => x.AppUser)
+                    .Where(post => post.IsPrivate == false)
+                    .ToListAsync();
         }
 
         public async Task<IEnumerable<Post>> GetAllUserPosts(string userId)
         {
-            return await _context.Posts.Where(post => post.AppUserId == userId).ToListAsync();
+            return await _context.Posts
+                    .Include(x => x.AppUser)
+                    .Where(post => post.AppUserId == userId)
+                    .ToListAsync();
         }
 
         public async Task<Post?> GetById(Guid id)
         {
-            return await _context.Posts.FindAsync(id);
+            var post = await _context.Posts.FindAsync(id);
+
+            if (post == null) return null;
+
+            return post;
         }
 
         public async Task Add(Post post)
@@ -64,6 +74,12 @@ namespace dotnet_BlogApp.Data.Repositories
         public void Delete(Post post)
         {
             _context.Posts.Remove(post);
+        }
+
+        public async Task DeleteAllUserPosts(string id)
+        {
+            _context.Posts
+              .RemoveRange(await this.GetAllUserPosts(id));
         }
     }
 }

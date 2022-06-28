@@ -12,7 +12,7 @@ using dotnet_BlogApp.Data;
 namespace dotnet_BlogApp.Migrations
 {
     [DbContext(typeof(BlogDbContext))]
-    [Migration("20220628040640_InitialCreate")]
+    [Migration("20220628114203_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

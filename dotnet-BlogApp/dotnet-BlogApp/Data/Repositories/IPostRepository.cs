@@ -11,5 +11,6 @@ namespace dotnet_BlogApp.Data.Repositories
         Task Add(Post post);
         void Update(PostAddEditVM postAddEditVM, Post post);
         void Delete(Post post);
+        Task DeleteAllUserPosts(string id);
     }
 }
