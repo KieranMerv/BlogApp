@@ -26,7 +26,7 @@ export class UsersApiCallsService {
   }
 
   logoutUser() {
-    this.http.post<any>(this.baseUrl + "users/logout", null).pipe(
+    return this.http.post<any>(this.baseUrl + "users/logout", null).pipe(
       map((response: any) => {
         console.log(response);
         localStorage.removeItem("user");

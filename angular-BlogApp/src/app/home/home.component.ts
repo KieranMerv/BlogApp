@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { PostVM } from '../_models/post-VM.model';
+import { ApiCallsService } from '../_services/api-calls.service';
 
 @Component({
   selector: 'app-home',
@@ -6,10 +8,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  postVMPublicCollection: PostVM[] = [];
 
-  constructor() { }
+  constructor(private apiCallsService: ApiCallsService) { }
 
   ngOnInit(): void {
+    this.apiCallsService.getPublicPosts().subscribe(response => {
+      this.postVMPublicCollection = response;
+    });
   }
 
 }

@@ -16,7 +16,7 @@ export class PostsComponent implements OnInit {
   constructor(private apiCallsService: ApiCallsService) { }
 
   ngOnInit(): void {
-    this.apiCallsService.getPosts().subscribe(response => {
+    this.apiCallsService.getUserPosts().subscribe(response => {
       this.postVMCollection = response;
     });
   }

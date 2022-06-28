@@ -1,15 +1,39 @@
-<div class="d-flex justify-content-center">
-  <div class="my-5 w-50">
-    <h1>Welcome to PrimaryBlog</h1>
-    <h3>A simple blog, for anyone.</h3>
-    <main class="my-5 d-flex">
-      <div>
-        <p>This is a minimalist, simple blog application with basic CRUD operations and authentication powered by Microsoft Identity. It serves as part of the portfolio of Mervin Wee, an aspiring web developer in the midst of a mid-career switch.</p>
-        <p>While care has been taken to make this application secure, it has not undergone industrial testing, so it is not recommended for any sensitive information to be input. Register with a fake email address, or an email address that is just for casual use.</p>
-      </div>
-      <div class="w-25">
-        <app-login-register></app-login-register>
-      </div>
-    </main>
+<main class="my-5 container-fluid">
+  <div class="d-flex">
+    <div class="w-75">
+      <h1>Welcome to PrimaryBlog</h1>
+      <h3>A simple blog, for anyone.</h3>
+      <p class="text-align-justify">This is a minimalist, simple blog application with basic CRUD operations and authentication powered by
+        Microsoft Identity. It serves as part of the portfolio of Mervin Wee, an aspiring web developer in the midst
+        of a mid-career switch.</p>
+      <p class="text-align-justify">While care has been taken to make this application secure, it has not undergone industrial testing, so it is
+        not recommended for any sensitive information to be input. Register with a fake email address, or an email
+        address that is just for casual use.</p>
+    </div>
+    <div class="w-25 border-start border-secondary">
+      <app-login-register></app-login-register>
+    </div>
   </div>
-</div>
+  <div class="border-top container-fluid">
+    <div class="d-flex flex-column align-items-center">
+      <div class="w-50" *ngFor="let publicPost of postVMPublicCollection">
+
+        <!-- Single Card -->
+        <div class="card border-0 shadow my-3">
+          <div class="card-body">
+            <h1 class="card-title">{{ publicPost.title }}<small class="fs-5">{{ publicPost.isPrivate ? ' [Private]' : ''
+                }}</small></h1>
+            <p class="card-text">{{ publicPost.body }}</p>
+            <div class="d-flex justify-content-start align-items-end">
+              <div>
+                <small class="d-block">Updated: {{ publicPost.updated | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>
+                <small class="d-block">Created: {{ publicPost.created | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</main>

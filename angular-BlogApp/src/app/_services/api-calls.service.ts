@@ -13,7 +13,11 @@ export class ApiCallsService {
 
   constructor(private http: HttpClient) { }
 
-  getPosts(): Observable<PostVM[]> {
+  getPublicPosts(): Observable<PostVM[]> {
+    return this.http.get<PostVM[]>(this.baseApiUrl + "/posts/public");
+  }
+
+  getUserPosts(): Observable<PostVM[]> {
     return this.http.get<PostVM[]>(this.baseApiUrl + "/posts");
   }
 
