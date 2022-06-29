@@ -20,6 +20,7 @@ import { LoginFormComponent } from './home/login-register/login-form/login-form.
 import { RegisterFormComponent } from './home/login-register/register-form/register-form.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { ToastrModule } from 'ngx-toastr';
+import { ErrorInterceptor } from './_interceptors/error.interceptor';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { ToastrModule } from 'ngx-toastr';
     ReactiveFormsModule
   ],
   providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]

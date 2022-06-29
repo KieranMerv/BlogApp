@@ -31,11 +31,15 @@ export class PostComponent implements OnInit {
     body: '',
     created: new Date(Date.now()),
     updated: new Date(Date.now()),
-    isPrivate: true
+    isPrivate: true,
+    authorAlias: ''
   };
   modalRef?: BsModalRef;
   postId: string | null = null;
   editMode: boolean = false;
+  busyStatusGet = false;
+  busyStatusCreateUpdate = false;
+  busyStatusDelete = false;
   
   constructor(private apiCallsService: ApiCallsService, 
     private bsModalService: BsModalService,
@@ -47,14 +51,21 @@ export class PostComponent implements OnInit {
     this.postId = this.route.snapshot.paramMap.get('id');
 
     if (this.postId !== null) {
-        this.apiCallsService.getPostById(this.postId).subscribe(response => {
-          this.postVM = response;
-
-          this.postForm.setValue({
-            postTitle: this.postVM.title,
-            postBody: this.postVM.body,
-            postIsPrivate: this.postVM.isPrivate
-          });
+        this.busyStatusGet = true;
+        this.apiCallsService.getPostById(this.postId).subscribe({
+          next: response => {
+            this.busyStatusGet = false;
+            this.postVM = response;
+  
+            this.postForm.setValue({
+              postTitle: this.postVM.title,
+              postBody: this.postVM.body,
+              postIsPrivate: this.postVM.isPrivate
+            });
+          },
+          error: () => {
+            this.busyStatusGet = false;
+          }
         });
     } else {
       this.editMode = true;
@@ -76,34 +87,43 @@ export class PostComponent implements OnInit {
     this.postAddEditVM.updated = new Date(Date.now());
     if (this.postId == null) {
       this.postAddEditVM.created = new Date(Date.now());
+      this.busyStatusCreateUpdate = true;
       this.apiCallsService.createPost(this.postAddEditVM).subscribe({
         next: response => {
+          this.busyStatusCreateUpdate = false;
           this.toastr.success('New post created!');
           this.router.navigate(['/posts', response]);
         },
-        error: error => {
-          console.log(error);
-          this.toastr.error('New post creation failed.');
+        error: () => {
+          this.busyStatusCreateUpdate = false;
         }
       });
     } else {
-      this.apiCallsService.updatePost(this.postId, this.postAddEditVM).subscribe(() => {
-        this.toastr.success('Post updated!');
+      this.busyStatusCreateUpdate = true;
+      this.apiCallsService.updatePost(this.postId, this.postAddEditVM).subscribe({
+        next: () => {
+          this.busyStatusCreateUpdate = false;
+          this.toastr.success('Post updated!');
+        },
+        error: () => {
+          this.busyStatusCreateUpdate = false;
+        }
       });
     }
   }
 
   deletePost() {
     if (this.postId != null) {
+      this.busyStatusDelete = true;
       this.apiCallsService.deletePost(this.postId).subscribe({
         next: () => {
           this.modalRef?.hide();
+          this.busyStatusDelete = false;
           this.toastr.success('Post deleted!');
           this.router.navigate(['/posts']);
         },
-        error: error => {
-          console.log(error);
-          this.toastr.error('Post deletion failed.');
+        error: () => {
+          this.busyStatusDelete = false;
         }
       });
     }

@@ -23,6 +23,7 @@ export class UserDetailsComponent implements OnInit {
     userPassword: new FormControl('', Validators.required),
     userNewPassword: new FormControl('')
   });
+  confirmDeleteInput = new FormControl('');
   userUpdateVM: UserUpdateVM = {
     userName: '',
     alias: '',
@@ -38,7 +39,8 @@ export class UserDetailsComponent implements OnInit {
   currentUser: User | null = null;
   modalRef?: BsModalRef;
   editMode: boolean = false;
-  confirmDeleteInput = new FormControl('');
+  busyStatusUpdate = false;
+  busyStatusDelete = false;
 
   constructor(
     private usersApiCallsService: UsersApiCallsService, 
@@ -79,19 +81,21 @@ export class UserDetailsComponent implements OnInit {
     this.userUpdateVM.password = this.userUpdateForm.get('userPassword')?.value;
 
     const userNewPassword = this.userUpdateForm.get('userNewPassword')?.value;
+
     if (userNewPassword === null || userNewPassword === '')
       this.userUpdateVM.newPassword = null;
     else
       this.userUpdateVM.newPassword = userNewPassword;
 
+    this.busyStatusUpdate = true;
     this.usersApiCallsService.updateUser(this.userUpdateVM).subscribe({
       next: () => {
+        this.busyStatusUpdate = false;
         this.toastr.success('User updated!');
         this.router.navigate(['/user/details']);
       },
-      error: error => {
-        console.log(error);
-        this.toastr.error('User update failed.');
+      error: () => {
+        this.busyStatusUpdate = false;
       }
     });
   }
@@ -102,20 +106,21 @@ export class UserDetailsComponent implements OnInit {
         this.userDeleteVM.email = this.usersApiCallsService.getDecodedToken(this.currentUser?.token)['email'];
 
       this.userDeleteVM.password = this.userUpdateForm.get('userPassword')?.value;
+
+      this.busyStatusDelete = true;
       this.usersApiCallsService.deleteUser(this.userDeleteVM).subscribe({
         next: () => {
           this.modalRef?.hide();
+          this.busyStatusDelete = false;
           this.toastr.success('User deleted!');
           this.router.navigate(['/']);
         },
-        error: error => {
-          console.log(error);
-          this.toastr.error('User deletion failed.');
+        error: () => {
+          this.busyStatusDelete = false;
         }
       });
     } else {
       this.toastr.error('User deletion failed. Delete confirmation input incorrect.');
-      console.log("Deletion of user failed. Delete confirmation input did not match requested value.");
     }
   }
 }

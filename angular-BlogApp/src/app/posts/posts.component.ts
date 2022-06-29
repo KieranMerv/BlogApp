@@ -10,14 +10,22 @@ import { ApiCallsService } from '../_services/api-calls.service';
 })
 export class PostsComponent implements OnInit {
   postVMCollection: PostVM[] = [];
+  busyStatus = false;
 
   currentDeleteId: string = '';
 
   constructor(private apiCallsService: ApiCallsService) { }
 
   ngOnInit(): void {
-    this.apiCallsService.getUserPosts().subscribe(response => {
-      this.postVMCollection = response;
+    this.busyStatus = true;
+    this.apiCallsService.getUserPosts().subscribe({
+      next: response => {
+        this.busyStatus = false;
+        this.postVMCollection = response;
+      },
+      error: () => {
+        this.busyStatus = false;
+      }
     });
   }
 }

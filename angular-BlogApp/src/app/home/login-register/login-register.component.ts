@@ -8,6 +8,7 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 })
 export class LoginRegisterComponent implements OnInit {
   @ViewChild('loginRegisterTabs', {static: true}) loginRegisterTabs?: TabsetComponent;
+  
   constructor() { }
 
   ngOnInit(): void {

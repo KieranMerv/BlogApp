@@ -30,6 +30,8 @@ export class RegisterFormComponent implements OnInit {
     confirmPassword: ''
   }
 
+  busyStatusRegister = false;
+
   constructor(private usersApiCallsService: UsersApiCallsService, 
     private router: Router,
     private toastr: ToastrService) { }
@@ -44,15 +46,16 @@ export class RegisterFormComponent implements OnInit {
     this.userRegisterVM.password = this.registerForm.get('registerPassword')?.value;
     this.userRegisterVM.confirmPassword = this.registerForm.get('registerConfirmPassword')?.value;
 
+    this.busyStatusRegister = true;
     this.usersApiCallsService.registerUser(this.userRegisterVM).subscribe({
       next: (response) => {
+        this.busyStatusRegister = false;
         console.log(response);
         this.toastr.success('User registered!');
         this.router.navigate(['/posts']);
       },
-      error: error => {
-        console.log(error);
-        this.toastr.error('User registration failed.');
+      error: () => {
+        this.busyStatusRegister = false;
       }
     });
   }

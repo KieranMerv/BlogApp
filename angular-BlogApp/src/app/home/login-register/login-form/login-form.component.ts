@@ -15,6 +15,7 @@ export class LoginFormComponent implements OnInit {
     loginEmail: new FormControl('', [Validators.required, Validators.email]),
     loginPassword: new FormControl('', Validators.required)
   });
+  busyStatusLogin = false;
 
   userLoginVM: UserLoginVM = {
     email: '',
@@ -33,14 +34,15 @@ export class LoginFormComponent implements OnInit {
     this.userLoginVM.email = this.loginForm.get('loginEmail')?.value;
     this.userLoginVM.password = this.loginForm.get('loginPassword')?.value;
 
+    this.busyStatusLogin = true;
     this.usersApiCallsService.loginUser(this.userLoginVM).subscribe({
       next: response => {
         console.log(response);
+        this.busyStatusLogin = false;
         this.router.navigate(['/posts']);
       },
-      error: error => {
-        console.log(error);
-        this.toastr.error("Login failed.");
+      error: () => {
+        this.busyStatusLogin = false;
       }
     });
   }
