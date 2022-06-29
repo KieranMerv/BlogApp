@@ -80,10 +80,11 @@ namespace dotnet_BlogApp.Data.DbInitializer
                     Id = Guid.NewGuid(),
                     Title = "First Blog Post (From Admin)",
                     Body = "This is the first blog post seeded into this application just to fill it up with content so that the User Interface can be shown. " +
-                    "It is just a simple application, made from several days of hard work from an aspiring Angular / .Net developer. There is much to be improved on. " +
-                    "The main purpose of this app, however, is just as a portfolio and not meant to be a super-scaled production application. " +
-                    "I'm not a designer, so I know the design of this application is not mind blowing. " +
-                    "My Thank you for reading this! My github link where this app's code is placed is https://github.com/KieranMerv/ ." +
+                    "This web application is just a simple application, made from a week of hard work from an aspiring Angular / .Net developer. " +
+                    "The main purpose of this app is for it to be part of a portfolio and not meant to be a super-scaled production application. " +
+                    "Thank you for reading this! If you have time, please try out this app. If there are issues, it may be highlighted through this app's public posts. " +
+                    "Special thanks to Neil Cummings for his wonderful Udemy course titled 'Build an App with ASP.NET Core and Angular from scratch'. " +
+                    "Without reference to this course, this web application would not have been possible." +
                     "The rest of the seed posts will just be Lorem Ipsum because I don't want to spend too much time manually generating data to seed this.",
                     Created = DateTime.Parse("16 May 2016"),
                     Updated = DateTime.Parse("28 Dec 2017"),
