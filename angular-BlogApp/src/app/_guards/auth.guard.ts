@@ -20,7 +20,6 @@ export class AuthGuard implements CanActivate {
       map(user => {
         if (user) return true;
         this.toastr.error("Unauthorized page access detected.");
-        console.log("Please sign in to continue to the requested page.");
         return this.router.parseUrl('/');
       })
     );

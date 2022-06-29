@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
+import { User } from 'src/app/_models/user.model';
+import { UsersApiCallsService } from 'src/app/_services/users-api-calls.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-login-register',
@@ -8,8 +11,13 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 })
 export class LoginRegisterComponent implements OnInit {
   @ViewChild('loginRegisterTabs', {static: true}) loginRegisterTabs?: TabsetComponent;
+  currentUser: User | null = null;
   
-  constructor() { }
+  constructor(public usersApiCallsService: UsersApiCallsService) {
+    this.usersApiCallsService.currentUser$.pipe(take(1)).subscribe(response => {
+      this.currentUser = response;
+    });
+  }
 
   ngOnInit(): void {
   }

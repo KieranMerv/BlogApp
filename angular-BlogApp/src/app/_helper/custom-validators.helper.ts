@@ -13,11 +13,12 @@ export class CustomValidators {
           if (matchingControl.errors === null) {
             matchingControl.setErrors({ passwordMatchConfirm: true });
           } else {
-              matchingControl.errors['passwordMatchConfirm'] = true;
+            matchingControl.errors['passwordMatchConfirm'] = true;
           }
-      }
-      
-        return { formGroupPasswordMatchConfirm: true };
+          return { formGroupPasswordMatchConfirm: true };
+        } else {
+          return null;
+        }
       }
 
       return null;

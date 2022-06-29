@@ -184,7 +184,7 @@ namespace dotnet_BlogApp.Controllers
 
             _logger.LogInformation($"User with ID {deleteAppUser.Id} deleted themselves.");
 
-            return Ok("User deleted.");
+            return Accepted();
         }
     }
 }

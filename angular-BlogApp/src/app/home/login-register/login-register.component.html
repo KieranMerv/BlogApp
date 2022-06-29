@@ -1,5 +1,5 @@
 <tabset #loginRegisterTabs>
-    <tab class="text-dark" heading="Login">
+    <tab class="text-dark" [heading]="(usersApiCallsService.currentUser$ | async) === null ? 'Login' : 'Logout'">
         <app-login-form></app-login-form>
     </tab>
     <tab class="text-dark" heading="Register">

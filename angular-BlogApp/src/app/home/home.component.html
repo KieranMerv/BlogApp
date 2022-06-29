@@ -1,6 +1,10 @@
 <main class="my-5 container-fluid">
   <div class="d-flex">
     <div class="px-5 w-100 mb-5 d-flex">
+      <div class="w-50">
+        <a class="text-white" href="https://www.vecteezy.com/free-vector/primary">Primary Vectors by Vecteezy</a>
+        <img class="image-fluid w-100" src="../../assets/HomepageImage.jpg" alt="Homepage Image" />        
+      </div>
       <div>
         <h1 class="my-5">Welcome to PrimaryBlog</h1>
         <h3 class="mb-5">A simple blog, for anyone.</h3>
@@ -12,11 +16,8 @@
           industrial testing, so it is
           not recommended for any sensitive information to be input. Register with a fake email address, or an email
           address that is just for casual use.</p>
-      </div>
-      <div class="w-25">
-        <img class="image-fluid" src="../../assets/HomepageImage.jpg" alt="Homepage Image" />
-        <a class="text-light" href="https://www.vecteezy.com/free-vector/primary">Primary Vectors by Vecteezy</a>
-      </div>
+        <p class="mt-5">Github Link: <a href="https://github.com/KieranMerv/BlogApp.git">https://github.com/KieranMerv/BlogApp.git</a></p>
+      </div>      
     </div>
     <div class="w-25 border-start border-secondary">
       <app-login-register></app-login-register>
@@ -36,7 +37,7 @@
                 : ''
                 }}</small></h1>
             <p class="card-text text-justify">{{ publicPost.body }}</p>
-            <div class="d-flex justify-content-start align-items-end">
+            <div class="d-flex justify-content-between align-items-end">
               <div class="mt-5">
                 <small class="d-block">Updated: {{ publicPost.updated | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>
                 <small class="d-block">Created: {{ publicPost.created | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>

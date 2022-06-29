@@ -1,8 +1,8 @@
 <form [formGroup]="registerForm" (ngSubmit)="registerForm.valid && onSubmit()" class="m-5">
   <div class="mb-3">
     <label for="userNameInputRegister" class="form-label">UserName</label>
-    <input type="text" class="form-control" id="userNameInputRegister" formControlName="registerUserName" />
-    <p *ngIf="registerForm.get('registerUserName')?.hasError('required') && registerForm.get('registerUserName')?.touched" class="invalid-feedback">UserName is required.</p>
+    <input [class.is-invalid]="registerForm.controls['registerUserName'].hasError('required') && registerForm.controls['registerUserName'].touched" type="text" class="form-control" id="userNameInputRegister" formControlName="registerUserName" />
+    <p *ngIf="registerForm.controls['registerUserName'].hasError('required') && registerForm.controls['registerUserName'].touched" class="invalid-feedback">UserName is required.</p>
   </div>
   <div class="mb-3">
     <label for="aliasInputRegister" class="form-label">Alias</label>
@@ -10,31 +10,31 @@
   </div>
   <div class="mb-3">
     <label for="emailInputRegister" class="form-label">Email</label>
-    <input type="text" class="form-control" id="emailInputRegister" formControlName="registerEmail" />
-    <p *ngIf="registerForm.get('registerEmail')?.hasError('required') && registerForm.get('registerEmail')?.touched" class="invalid-feedback">Email is required.</p>
-    <p *ngIf="registerForm.get('registerEmail')?.hasError('email') && registerForm.get('registerEmail')?.touched" class="invalid-feedback">Valid email format is required.</p>
+    <input [class.is-invalid]="(registerForm.controls['registerEmail'].hasError('required') || registerForm.controls['registerEmail'].hasError('email')) && registerForm.controls['registerEmail'].touched" type="text" class="form-control" id="emailInputRegister" formControlName="registerEmail" />
+    <p *ngIf="registerForm.controls['registerEmail'].hasError('required') && registerForm.controls['registerEmail'].touched" class="invalid-feedback">Email is required.</p>
+    <p *ngIf="registerForm.controls['registerEmail'].hasError('email') && registerForm.controls['registerEmail'].touched" class="invalid-feedback">Valid email format is required.</p>
   </div>
   <div class="mb-3">
     <label for="passwordInputRegister" class="form-label">Password</label>
-    <input type="password" class="form-control" id="passwordInputRegister" formControlName="registerPassword" />
-    <p *ngIf="registerForm.get('registerPassword')?.hasError('required') && registerForm.get('registerPassword')?.touched" class="invalid-feedback">Password is required.</p>
+    <input [class.is-invalid]="registerForm.controls['registerPassword'].hasError('required') && registerForm.controls['registerPassword'].touched" type="password" class="form-control" id="passwordInputRegister" formControlName="registerPassword" />
+    <p *ngIf="registerForm.controls['registerPassword'].hasError('required') && registerForm.controls['registerPassword'].touched" class="invalid-feedback">Password is required.</p>
   </div>
   <div class="mb-3">
     <label for="confirmPasswordInputRegister" class="form-label">Confirm Password</label>
-    <input type="password" class="form-control" id="confirmPasswordInputRegister" formControlName="registerConfirmPassword" />
-    <p *ngIf="registerForm.get('registerPassword')?.hasError('required') && registerForm.get('registerPassword')?.touched" class="invalid-feedback">Password confirmation is required.</p>
-    <p *ngIf="registerForm.hasError('formGroupPasswordMatchConfirm') && registerForm.get('registerConfirmPassword')?.touched" class="invalid-feedback">Password must match confirmation password.</p>
+    <input [class.is-invalid]="(registerForm.controls['registerConfirmPassword'].hasError('required') || registerForm.hasError('formGroupPasswordMatchConfirm')) && registerForm.controls['registerConfirmPassword'].touched" type="password" class="form-control" id="confirmPasswordInputRegister" formControlName="registerConfirmPassword" />
+    <p *ngIf="registerForm.controls['registerPassword'].hasError('required') && registerForm.controls['registerPassword'].touched" class="invalid-feedback">Password confirmation is required.</p>
+    <p *ngIf="registerForm.hasError('formGroupPasswordMatchConfirm') && registerForm.controls['registerConfirmPassword'].touched" class="invalid-feedback">Password must match confirmation password.</p>
   </div>
 
   <div class="row" *ngIf="validationErrors.length > 0">
-    <ul class="invalid-feedback">
+    <ul class="text-danger">
       <li *ngFor="let error of validationErrors">
         {{ error }}
       </li>
     </ul>
   </div>
 
-  <div class="d-flex justify-content-end">
+  <div class="d-flex justify-content-end mt-5">
     <button type="submit" class="btn btn-success" [attr.disabled]="busyStatusRegister === true ? '' : (registerForm.valid === false ? '' : null)">
       <span *ngIf="busyStatusRegister === true" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
       <span *ngIf="busyStatusRegister === true" class="visually-hidden">Loading...</span>    

@@ -20,7 +20,7 @@ export class UserDetailsComponent implements OnInit {
     userUserName: new FormControl(''),
     userAlias: new FormControl(''),
     userEmail: new FormControl(''),
-    userNewEmail: new FormControl(''),
+    userNewEmail: new FormControl('', Validators.email),
     userPassword: new FormControl('', Validators.required),
     userNewPassword: new FormControl(''),
     userNewConfirmPassword: new FormControl('')
@@ -62,6 +62,10 @@ export class UserDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.userUpdateForm.controls['userNewPassword'].valueChanges.subscribe(() => {
+      this.userUpdateForm.controls['userNewConfirmPassword'].updateValueAndValidity();
+    });
+
     this.userUpdateForm.get('userUserName')?.setValue(this.currentUser?.userName);
     this.userUpdateForm.get('userAlias')?.setValue(this.currentUser?.alias);
     if (typeof(this.currentUser?.token) === 'string')

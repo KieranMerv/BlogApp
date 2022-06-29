@@ -24,14 +24,15 @@
         </div>
         <div class="mb-3" *ngIf="editMode">
           <label for="newEmailInput" class="form-label">New Email (Leave empty if not changing email)</label>
-          <input type="email" class="form-control" id="newEmailInput" formControlName="userNewEmail"
+          <input [class.is-invalid]="userUpdateForm.controls['userNewEmail'].hasError('email') && userUpdateForm.controls['userNewEmail'].touched" type="email" class="form-control" id="newEmailInput" formControlName="userNewEmail"
             [readonly]="!editMode" />
+          <p *ngIf="userUpdateForm.controls['userNewEmail'].hasError('email') && userUpdateForm.controls['userNewEmail'].touched" class="invalid-feedback">Valid email format is required.</p>
         </div>
         <div class="mb-3" *ngIf="editMode">
           <label for="passwordInput" class="form-label">Password (Required for update of any user details)</label>
-          <input type="password" class="form-control" id="passwordInput" formControlName="userPassword"
+          <input [class.is-invalid]="userUpdateForm.controls['userPassword'].hasError('required')" type="password" class="form-control" id="passwordInput" formControlName="userPassword"
             [readonly]="!editMode" />
-          <p *ngIf="userUpdateForm.get('userPassword')?.hasError('required') && userUpdateForm.get('userPassword')?.touched" class="invalid-feedback">Password is required.</p>
+          <p *ngIf="userUpdateForm.controls['userPassword'].hasError('required')" class="invalid-feedback">Password is required.</p>
         </div>
         <div class="mb-3" *ngIf="editMode">
           <label for="newPasswordInput" class="form-label">New Password (Leave empty if not changing password)</label>
@@ -40,12 +41,13 @@
         </div>
         <div class="mb-3" *ngIf="editMode">
           <label for="newPasswordConfirmInput" class="form-label">Confirm New Password (Leave empty if not changing password)</label>
-          <input type="password" class="form-control" id="newPasswordConfirmInput" formControlName="userNewConfirmPassword"
+          <input [class.is-invalid]="userUpdateForm.hasError('formGroupPasswordMatchConfirm') && userUpdateForm.controls['userNewConfirmPassword'].touched" type="password" class="form-control" id="newPasswordConfirmInput" formControlName="userNewConfirmPassword"
             [readonly]="!editMode" />
-          <p *ngIf="userUpdateForm.hasError('formGroupPasswordMatchConfirm') && userUpdateForm.get('userNewConfirmPassword')?.touched" class="invalid-feedback">New password must match confirmation new password.</p>
+          <p *ngIf="userUpdateForm.hasError('formGroupPasswordMatchConfirm') && userUpdateForm.controls['userNewConfirmPassword'].touched" class="invalid-feedback">New password must match confirmation new password.</p>
         </div>
+        
         <div class="row" *ngIf="validationErrors.length > 0">
-          <ul class="invalid-feedback">
+          <ul class="text-danger">
             <li *ngFor="let error of validationErrors">
               {{ error }}
             </li>
@@ -95,10 +97,10 @@
   <div class="modal-body">
     Do you really want to delete this user (i.e. this account)? This action cannot be undone. Type "dEleTe m*E" to confirm:
   </div>
-  <div class="px-5">
-    <input type="text" [formControl]="confirmDeleteInput" />
+  <div class="d-flex justify-content-center">
+    <input class="w-75" type="text" [formControl]="confirmDeleteInput" />
   </div>
-  <div class="d-flex justify-content-end">
+  <div class="d-flex justify-content-end w-100">
     <div class="my-3">
       <button type="button" class="btn btn-outline-secondary" (click)="modalRef?.hide()">Cancel</button>
       <button type="button" class="btn btn-danger ms-2 me-3" (click)="deleteUser(); modalRef?.hide();">Delete</button>

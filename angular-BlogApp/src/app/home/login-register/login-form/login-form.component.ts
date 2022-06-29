@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
 import { UserLoginVM } from 'src/app/_models/user-loginVM.model';
+import { User } from 'src/app/_models/user.model';
 import { UsersApiCallsService } from 'src/app/_services/users-api-calls.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-login-form',
@@ -11,6 +12,7 @@ import { UsersApiCallsService } from 'src/app/_services/users-api-calls.service'
   styleUrls: ['./login-form.component.css']
 })
 export class LoginFormComponent implements OnInit {
+  currentUser: User | null = null;
   loginForm = new FormGroup({
     loginEmail: new FormControl('', [Validators.required, Validators.email]),
     loginPassword: new FormControl('', Validators.required)
@@ -25,9 +27,12 @@ export class LoginFormComponent implements OnInit {
   };
 
   constructor(
-    private usersApiCallsService: UsersApiCallsService, 
-    private router: Router,
-    private toastr: ToastrService) { }
+    public usersApiCallsService: UsersApiCallsService, 
+    private router: Router) {
+      this.usersApiCallsService.currentUser$.pipe(take(1)).subscribe(response => {
+        this.currentUser = response;
+      });
+  }
 
   ngOnInit(): void {
   }
@@ -38,8 +43,7 @@ export class LoginFormComponent implements OnInit {
 
     this.busyStatusLogin = true;
     this.usersApiCallsService.loginUser(this.userLoginVM).subscribe({
-      next: response => {
-        console.log(response);
+      next: () => {
         this.busyStatusLogin = false;
         this.router.navigate(['/posts']);
       },
@@ -48,5 +52,9 @@ export class LoginFormComponent implements OnInit {
         this.validationErrors = error;
       }
     });
+  }
+
+  logout() {
+    this.usersApiCallsService.logoutUser();
   }
 }

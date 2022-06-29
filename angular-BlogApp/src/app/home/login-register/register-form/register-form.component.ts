@@ -49,9 +49,8 @@ export class RegisterFormComponent implements OnInit {
 
     this.busyStatusRegister = true;
     this.usersApiCallsService.registerUser(this.userRegisterVM).subscribe({
-      next: (response) => {
+      next: () => {
         this.busyStatusRegister = false;
-        console.log(response);
         this.toastr.success('User registered!');
         this.router.navigate(['/posts']);
       },

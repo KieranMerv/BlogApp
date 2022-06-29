@@ -12,3 +12,7 @@ body {
 .text-justify {
   text-align: justify;
 }
+
+tabset > ul.nav-tabs > li.nav-item > a:not(.active).nav-link > span {
+  color: lightgray;
+}
