@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace dotnet_BlogApp.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class PrimaryBlogInitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
