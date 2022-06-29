@@ -18,6 +18,7 @@ export class PostComponent implements OnInit {
     postBody: new FormControl(''),
     postIsPrivate: new FormControl(true)
   });
+
   postAddEditVM: PostAddEditVM = {
     title: '',
     body: '',
@@ -25,6 +26,7 @@ export class PostComponent implements OnInit {
     updated: new Date(Date.now()),
     isPrivate: true
   };
+
   postVM: PostVM = {
     id: '',
     title: '',
@@ -34,9 +36,11 @@ export class PostComponent implements OnInit {
     isPrivate: true,
     authorAlias: ''
   };
+  
   modalRef?: BsModalRef;
   postId: string | null = null;
   editMode: boolean = false;
+  validationErrors: string[] = [];
   busyStatusGet = false;
   busyStatusCreateUpdate = false;
   busyStatusDelete = false;
@@ -94,8 +98,9 @@ export class PostComponent implements OnInit {
           this.toastr.success('New post created!');
           this.router.navigate(['/posts', response]);
         },
-        error: () => {
+        error: error => {
           this.busyStatusCreateUpdate = false;
+          this.validationErrors = error;
         }
       });
     } else {
@@ -105,8 +110,9 @@ export class PostComponent implements OnInit {
           this.busyStatusCreateUpdate = false;
           this.toastr.success('Post updated!');
         },
-        error: () => {
+        error: error => {
           this.busyStatusCreateUpdate = false;
+          this.validationErrors = error;
         }
       });
     }
@@ -122,8 +128,9 @@ export class PostComponent implements OnInit {
           this.toastr.success('Post deleted!');
           this.router.navigate(['/posts']);
         },
-        error: () => {
+        error: error => {
           this.busyStatusDelete = false;
+          this.validationErrors = error;
         }
       });
     }

@@ -8,6 +8,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { UserDeleteVM } from '../_models/user-deleteVM.model';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { CustomValidators } from '../_helper/custom-validators.helper';
 
 @Component({
   selector: 'app-user-details',
@@ -21,8 +22,12 @@ export class UserDetailsComponent implements OnInit {
     userEmail: new FormControl(''),
     userNewEmail: new FormControl(''),
     userPassword: new FormControl('', Validators.required),
-    userNewPassword: new FormControl('')
-  });
+    userNewPassword: new FormControl(''),
+    userNewConfirmPassword: new FormControl('')
+  },
+  CustomValidators.passwordMatchConfirm('userNewPassword', 'userNewConfirmPassword')
+  );
+
   confirmDeleteInput = new FormControl('');
   userUpdateVM: UserUpdateVM = {
     userName: '',
@@ -30,15 +35,19 @@ export class UserDetailsComponent implements OnInit {
     email: '',
     newEmail: null,
     password: '',
-    newPassword: null
+    newPassword: null,
+    newConfirmPassword: null
   };
+
   userDeleteVM: UserDeleteVM = {
     email: '',
     password: ''
-  }
+  };
+
   currentUser: User | null = null;
   modalRef?: BsModalRef;
   editMode: boolean = false;
+  validationErrors: string[] = [];
   busyStatusUpdate = false;
   busyStatusDelete = false;
 
@@ -82,10 +91,22 @@ export class UserDetailsComponent implements OnInit {
 
     const userNewPassword = this.userUpdateForm.get('userNewPassword')?.value;
 
-    if (userNewPassword === null || userNewPassword === '')
+    const userNewConfirmPassword = this.userUpdateForm.get('userNewConfirmPassword')?.value;
+
+    if (userNewPassword !== null && userNewPassword !== '') {
+      if (userNewPassword === userNewConfirmPassword) {
+        this.userUpdateVM.newPassword = userNewPassword;
+        this.userUpdateVM.newConfirmPassword = userNewConfirmPassword;
+      } else {
+        this.validationErrors.push('New password must match confirmation new password. Update aborted.');
+        return;
+      }
+    }
+    else {
       this.userUpdateVM.newPassword = null;
-    else
-      this.userUpdateVM.newPassword = userNewPassword;
+      this.userUpdateVM.newConfirmPassword = null;
+    }
+      
 
     this.busyStatusUpdate = true;
     this.usersApiCallsService.updateUser(this.userUpdateVM).subscribe({
@@ -94,8 +115,9 @@ export class UserDetailsComponent implements OnInit {
         this.toastr.success('User updated!');
         this.router.navigate(['/user/details']);
       },
-      error: () => {
+      error: error => {
         this.busyStatusUpdate = false;
+        this.validationErrors = error;
       }
     });
   }

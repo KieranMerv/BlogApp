@@ -118,11 +118,17 @@ namespace dotnet_BlogApp.Controllers
                 return Unauthorized("Password incorrect, unable to update current user.");
 
             // Check and update individual fields
+            if (updateAppUserVM.NewPassword != null)
+            {
+              if (updateAppUserVM.NewPassword != updateAppUserVM.NewConfirmPassword)
+              {
+                return BadRequest("New password does not match confirmation new password. Update aborted.");
+              }
+              await _userManager.ChangePasswordAsync(updateAppUser, updateAppUserVM.Password, updateAppUserVM.NewPassword);
+            }
+
             if (updateAppUserVM.UserName != null)
                 updateAppUser.UserName = updateAppUserVM.UserName;
-
-            if (updateAppUserVM.NewPassword != null)
-                await _userManager.ChangePasswordAsync(updateAppUser, updateAppUserVM.Password, updateAppUserVM.NewPassword);
 
             if (updateAppUserVM.NewEmail != null)
             {

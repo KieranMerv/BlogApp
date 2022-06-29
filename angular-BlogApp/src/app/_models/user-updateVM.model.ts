@@ -5,4 +5,5 @@ export interface UserUpdateVM {
   newEmail: string | null;
   password: string;
   newPassword: string | null;
+  newConfirmPassword: string | null;
 }

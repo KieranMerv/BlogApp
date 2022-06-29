@@ -8,7 +8,7 @@
     </div>
 
     <div class="w-50 my-5">
-      <form [formGroup]="userUpdateForm" (ngSubmit)="onSubmit()">
+      <form [formGroup]="userUpdateForm" (ngSubmit)="userUpdateForm.valid && onSubmit()">
         <div class="mb-3">
           <label for="userNameInput" class="form-label">UserName</label>
           <input type="text" class="form-control" id="userNameInput" formControlName="userUserName"
@@ -31,17 +31,33 @@
           <label for="passwordInput" class="form-label">Password (Required for update of any user details)</label>
           <input type="password" class="form-control" id="passwordInput" formControlName="userPassword"
             [readonly]="!editMode" />
+          <p *ngIf="userUpdateForm.get('userPassword')?.hasError('required') && userUpdateForm.get('userPassword')?.touched" class="invalid-feedback">Password is required.</p>
         </div>
         <div class="mb-3" *ngIf="editMode">
           <label for="newPasswordInput" class="form-label">New Password (Leave empty if not changing password)</label>
           <input type="password" class="form-control" id="newPasswordInput" formControlName="userNewPassword"
             [readonly]="!editMode" />
         </div>
+        <div class="mb-3" *ngIf="editMode">
+          <label for="newPasswordConfirmInput" class="form-label">Confirm New Password (Leave empty if not changing password)</label>
+          <input type="password" class="form-control" id="newPasswordConfirmInput" formControlName="userNewConfirmPassword"
+            [readonly]="!editMode" />
+          <p *ngIf="userUpdateForm.hasError('formGroupPasswordMatchConfirm') && userUpdateForm.get('userNewConfirmPassword')?.touched" class="invalid-feedback">New password must match confirmation new password.</p>
+        </div>
+        <div class="row" *ngIf="validationErrors.length > 0">
+          <ul class="invalid-feedback">
+            <li *ngFor="let error of validationErrors">
+              {{ error }}
+            </li>
+          </ul>
+        </div>
 
-        <div class="d-flex justify-content-end mt-5" *ngIf="editMode" >
+        <div class="d-flex justify-content-end mt-5" *ngIf="editMode">
           <div class="d-flex justify-content-end">
-            <button type="submit" class="btn btn-primary me-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            <button type="submit" class="btn btn-primary me-2" [attr.disabled]="busyStatusUpdate === true ? '' : (userUpdateForm.valid === false ? '' : null)">
+              <span *ngIf="busyStatusUpdate === true" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <span *ngIf="busyStatusUpdate === true" class="visually-hidden">Loading...</span>
+              <svg *ngIf="busyStatusUpdate === false" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                 class="bi bi-pencil-square" viewBox="0 0 16 16">
                 <path
                   d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
@@ -50,8 +66,10 @@
               </svg>
               Update
             </button>
-            <button type="button" (click)="openModal(template)" class="btn btn-danger">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
+            <button type="button" (click)="openModal(template)" class="btn btn-danger" [attr.disabled]="busyStatusDelete === true ? '' : null">
+              <span *ngIf="busyStatusDelete === true" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <span *ngIf="busyStatusDelete === true" class="visually-hidden">Loading...</span>
+              <svg *ngIf="busyStatusDelete === false" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
                 viewBox="0 0 16 16">
                 <path
                   d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />

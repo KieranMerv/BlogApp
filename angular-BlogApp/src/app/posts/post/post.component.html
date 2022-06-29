@@ -6,7 +6,7 @@
     </div>
 
     <div class="w-50 my-5">
-      <form [formGroup]="postForm" (ngSubmit)="onSubmit()">
+      <form [formGroup]="postForm" (ngSubmit)="postForm.valid && onSubmit()">
         <div class="mb-3">
           <label for="titleInput" class="form-label">Post Title</label>
           <input type="email" class="form-control" id="titleInput" formControlName="postTitle" [readonly]="!editMode" />
@@ -35,7 +35,7 @@
             <small class="d-block text-secondary opacity-50 fs-5">Created: {{ postVM.created | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>
           </div>
           <div class="d-flex justify-content-end">
-            <button *ngIf="editMode" type="submit" class="btn me-2" [ngClass]="this.postId === null ? 'btn-success' : 'btn-primary'" [attr.disabled]="busyStatusCreateUpdate === true ? '' : null">
+            <button *ngIf="editMode" type="submit" class="btn me-2" [ngClass]="this.postId === null ? 'btn-success' : 'btn-primary'" [attr.disabled]="busyStatusCreateUpdate === true ? '' : (postForm.valid === false ? '' : null)">
               <span *ngIf="busyStatusCreateUpdate === true" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
               <span *ngIf="busyStatusCreateUpdate === true" class="visually-hidden">Loading...</span>
               <svg *ngIf="busyStatusCreateUpdate === false && this.postId === null" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">

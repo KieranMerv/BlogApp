@@ -30,6 +30,7 @@ export class RegisterFormComponent implements OnInit {
     confirmPassword: ''
   }
 
+  validationErrors: string[] = [];
   busyStatusRegister = false;
 
   constructor(private usersApiCallsService: UsersApiCallsService, 
@@ -54,8 +55,9 @@ export class RegisterFormComponent implements OnInit {
         this.toastr.success('User registered!');
         this.router.navigate(['/posts']);
       },
-      error: () => {
+      error: error => {
         this.busyStatusRegister = false;
+        this.validationErrors = error;
       }
     });
   }

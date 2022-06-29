@@ -15,6 +15,8 @@ export class LoginFormComponent implements OnInit {
     loginEmail: new FormControl('', [Validators.required, Validators.email]),
     loginPassword: new FormControl('', Validators.required)
   });
+
+  validationErrors: string[] = [];
   busyStatusLogin = false;
 
   userLoginVM: UserLoginVM = {
@@ -41,8 +43,9 @@ export class LoginFormComponent implements OnInit {
         this.busyStatusLogin = false;
         this.router.navigate(['/posts']);
       },
-      error: () => {
+      error: error => {
         this.busyStatusLogin = false;
+        this.validationErrors = error;
       }
     });
   }
