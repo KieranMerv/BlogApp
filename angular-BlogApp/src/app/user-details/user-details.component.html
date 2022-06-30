@@ -1,13 +1,13 @@
 <div class="container-fluid">
   <div class="d-flex flex-column align-items-center">
 
-    <div class="w-50 mt-5 d-flex justify-content-start">
+    <div class="w-100 w-lg-75 mt-5 d-flex justify-content-start">
       <button class="btn btn-secondary" (click)="toggleEditMode()">
         {{editMode ? 'Click to View' : 'Click to Edit'}}
       </button>
     </div>
 
-    <div class="w-50 my-5">
+    <div class="w-100 w-lg-75 my-5">
       <form [formGroup]="userUpdateForm" (ngSubmit)="userUpdateForm.valid && onSubmit()">
         <div class="mb-3">
           <label for="userNameInput" class="form-label">UserName</label>

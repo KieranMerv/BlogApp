@@ -9,10 +9,50 @@ body {
   font-size: 1.5rem;
 }
 
+tabset > ul.nav-tabs > li.nav-item > a:not(.active).nav-link > span {
+  color: lightgray;
+}
+
 .text-justify {
   text-align: justify;
 }
 
-tabset > ul.nav-tabs > li.nav-item > a:not(.active).nav-link > span {
-  color: lightgray;
+@media all and (min-width: 768px) {
+  .w-md-25 {
+    width: 25%!important;
+  }
+
+  .w-md-50 {
+    width: 50%!important;
+  }
+
+  .w-md-75 {
+    width: 75%!important;
+  }
+
+  .w-md-100 {
+    width: 100%!important;
+  }
+}
+
+@media all and (min-width: 992px) {
+  .w-lg-25 {
+    width: 25%!important;
+  }
+
+  .w-lg-40 {
+    width: 40%!important;
+  }
+
+  .w-lg-50 {
+    width: 50%!important;
+  }
+
+  .w-lg-75 {
+    width: 75%!important;
+  }
+
+  .w-lg-100 {
+    width: 100%!important;
+  }
 }

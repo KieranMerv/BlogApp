@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <div class="d-flex flex-column align-items-center">
-    <div class="w-50 d-flex justify-content-end mt-3">
+    <div class="w-100 w-lg-75 d-flex justify-content-end mt-3">
       <a routerLink="/posts/new" class="btn btn-success">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
           <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
@@ -11,19 +11,19 @@
     <div *ngIf="busyStatus === true" class="spinner-border" role="status">
       <span class="visually-hidden">Loading...</span>
     </div>
-    <div class="w-50" *ngFor="let post of postVMCollection">
+    <div class="w-100 w-lg-75" *ngFor="let post of postVMCollection">
   
       <!-- Single Card -->
       <div class="card border-0 shadow my-3 p-5">
         <div class="card-body">
           <h1 class="card-title mb-5">{{ post.title }}<small class="fs-5">{{ post.isPrivate ?  ' [Private]' : '' }}</small></h1>
           <p class="card-text text-justify">{{ post.body }}</p>
-          <div class="d-flex justify-content-between align-items-end">
-            <div class="mt-5">
+          <div class="d-flex flex-column flex-lg-row justify-content-between align-items-end">
+            <div class="align-self-start align-self-lg-end mt-5">
               <small class="d-block text-secondary opacity-50 fs-5">Updated: {{ post.updated | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>
               <small class="d-block text-secondary opacity-50 fs-5">Created: {{ post.created | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>
             </div>
-            <div>
+            <div class="mt-5">
               <a routerLink="/posts/{{post.id}}" class="btn btn-primary">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
                   <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>

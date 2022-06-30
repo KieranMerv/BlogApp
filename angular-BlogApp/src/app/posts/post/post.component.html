@@ -1,11 +1,11 @@
 <div class="container-fluid">
   <div class="d-flex flex-column align-items-center">
 
-    <div class="w-50 mt-5 d-flex justify-content-start">
+    <div class="w-100 w-lg-75 mt-5 d-flex justify-content-start">
       <button *ngIf="postId !== null" class="btn btn-secondary" (click)="toggleEditMode()">{{editMode ? 'Click to View' : 'Click to Edit'}}</button>
     </div>
 
-    <div class="w-50 my-5">
+    <div class="w-100 w-lg-75 my-5">
       <form [formGroup]="postForm" (ngSubmit)="postForm.valid && onSubmit()">
         <div class="mb-3">
           <label for="titleInput" class="form-label">Post Title</label>
@@ -29,12 +29,12 @@
             </label>
           </div>
         </div>
-        <div class="d-flex justify-content-between align-items-end">
-          <div class="mt-5">
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-end">
+          <div class="align-self-start align-self-lg-end mt-5">
             <small class="d-block text-secondary opacity-50 fs-5">Updated: {{ postVM.updated | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>
             <small class="d-block text-secondary opacity-50 fs-5">Created: {{ postVM.created | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>
           </div>
-          <div class="d-flex justify-content-end">
+          <div class="d-flex justify-content-end mt-5">
             <button *ngIf="editMode" type="submit" class="btn me-2" [ngClass]="this.postId === null ? 'btn-success' : 'btn-primary'" [attr.disabled]="busyStatusCreateUpdate === true ? '' : (postForm.valid === false ? '' : null)">
               <span *ngIf="busyStatusCreateUpdate === true" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
               <span *ngIf="busyStatusCreateUpdate === true" class="visually-hidden">Loading...</span>
