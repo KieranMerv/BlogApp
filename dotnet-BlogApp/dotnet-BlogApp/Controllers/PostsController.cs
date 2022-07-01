@@ -120,8 +120,8 @@ namespace dotnet_BlogApp.Controllers
             {
                 Title = postAddEditVM.Title,
                 Body = postAddEditVM.Body,
-                Created = DateTime.Now,
-                Updated = DateTime.Now,
+                Created = DateTime.UtcNow,
+                Updated = DateTime.UtcNow,
                 IsPrivate = postAddEditVM.IsPrivate,
                 AppUserId = currentUser.Id
             };

@@ -14,7 +14,7 @@
     <div class="w-100 w-lg-75" *ngFor="let post of postVMCollection">
   
       <!-- Single Card -->
-      <div class="card border-0 shadow my-3 p-5">
+      <div class="card border-0 shadow my-3 py-5 px-1 px-lg-5">
         <div class="card-body">
           <h1 class="card-title mb-5">{{ post.title }}<small class="fs-5">{{ post.isPrivate ?  ' [Private]' : '' }}</small></h1>
           <p class="card-text text-justify">{{ post.body }}</p>

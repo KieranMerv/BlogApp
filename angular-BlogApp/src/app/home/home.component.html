@@ -8,15 +8,16 @@
       <div>
         <h1 class="my-5">Welcome to PrimaryBlog</h1>
         <h3 class="mb-5">A simple blog, for anyone.</h3>
-        <p class="text-justify">This is a minimalist, simple blog application with basic CRUD operations and
-          authentication powered by
-          Microsoft Identity. It serves as part of the portfolio of Mervin Wee, an aspiring web developer in the midst
-          of a mid-career switch.</p>
-        <p class="text-justify">While care has been taken to make this application secure, it has not undergone
-          industrial testing, so it is
-          not recommended for any sensitive information to be input. Register with a fake email address, or an email
-          address that is just for casual use.</p>
-        <p class="mt-5">Github Link: <a href="https://github.com/KieranMerv/BlogApp.git">https://github.com/KieranMerv/BlogApp.git</a></p>
+        <p class="text-justify">This is a minimalist, simple blog application for anyone to pen down any thoughts, emotions, experiences, expressions, secrets, anything that their hearts desire. It is a safe place for anybody. It can be shared publicly on the front page, or it can be private, i.e. only accessible to the author.
+        </p>
+        <p class="text-justify">This app is a SPA built using Angular and .Net Core, and features basic CRUD operations and authentication powered by Microsoft Identity. It serves as part of the portfolio of Mervin Wee, an aspiring web developer in the midst of a mid-career switch.
+        </p>
+        <p class="text-justify">While care has been taken to make this application secure, it has not undergone industrial testing. It is therefore not recommended for any sensitive information to be input as credentials. Register with a fake email address, or an email address that is just for casual use.
+        </p>
+        <p class="text-justify">Thank you, and please enjoy this app!</p>
+        <p class="mt-5">
+          <a href="https://github.com/KieranMerv/BlogApp.git">Github Link</a>
+        </p>
       </div>      
     </div>
     <div class="w-100 w-lg-40 border-start border-secondary border-opacity-50">
@@ -31,7 +32,7 @@
       <div class="w-100 w-lg-75" *ngFor="let publicPost of postVMPublicCollection">
 
         <!-- Single Card -->
-        <div class="card border-0 shadow my-3 p-5">
+        <div class="card border-0 shadow my-3 py-5 px-1 px-lg-5">
           <div class="card-body">
             <h1 class="card-title mb-5">{{ publicPost.title }}<small class="fs-5">{{ publicPost.isPrivate ? ' [Private]'
                 : ''

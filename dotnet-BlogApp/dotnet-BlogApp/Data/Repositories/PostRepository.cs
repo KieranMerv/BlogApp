@@ -18,6 +18,7 @@ namespace dotnet_BlogApp.Data.Repositories
             return await _context.Posts
                     .Include(x => x.AppUser)
                     .Where(post => post.IsPrivate == false)
+                    .OrderByDescending(post => post.Created)
                     .ToListAsync();
         }
 
@@ -26,6 +27,7 @@ namespace dotnet_BlogApp.Data.Repositories
             return await _context.Posts
                     .Include(x => x.AppUser)
                     .Where(post => post.AppUserId == userId)
+                    .OrderByDescending(post => post.Created)
                     .ToListAsync();
         }
 
@@ -65,7 +67,7 @@ namespace dotnet_BlogApp.Data.Repositories
                 postChanged = true;
             }
 
-            if (postChanged == true) post.Updated = DateTime.Now;
+            if (postChanged == true) post.Updated = DateTime.UtcNow;
 
             // Not needed!
             // _context.Posts.Update(post);

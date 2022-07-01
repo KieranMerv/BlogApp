@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
+import { map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { PostAddEditVM } from '../_models/post-addeditVM.model';
 import { PostVM } from '../_models/post-VM.model';
@@ -14,15 +15,40 @@ export class ApiCallsService {
   constructor(private http: HttpClient) { }
 
   getPublicPosts(): Observable<PostVM[]> {
-    return this.http.get<PostVM[]>(this.baseApiUrl + "/posts/public");
+    return this.http.get<PostVM[]>(this.baseApiUrl + "/posts/public").pipe(
+      // Account for Timezone Offset. Note: Returns response returns date as a string!
+      map(response => {
+        return response.map(el => {
+          el.created = new Date(el.created + 'Z');
+          el.updated = new Date(el.updated + 'Z');
+          return el;
+        });
+      })
+    );
   }
 
   getUserPosts(): Observable<PostVM[]> {
-    return this.http.get<PostVM[]>(this.baseApiUrl + "/posts");
+    return this.http.get<PostVM[]>(this.baseApiUrl + "/posts").pipe(
+      // Account for Timezone Offset. Note: Returns response returns date as a string!
+      map(response => {
+        return response.map(el => {
+          el.created = new Date(el.created + 'Z');
+          el.updated = new Date(el.updated + 'Z');
+          return el;
+        });
+      })
+    );;
   }
 
   getPostById(id: string): Observable<PostVM> {
-    return this.http.get<PostVM>(this.baseApiUrl + "/posts/" + id);
+    return this.http.get<PostVM>(this.baseApiUrl + "/posts/" + id).pipe(
+      // Account for Timezone Offset. Note: Returns response returns date as a string!
+      map(response => {
+        response.created = new Date(response.created + 'Z');
+        response.updated = new Date(response.updated + 'Z');
+        return response;
+      })
+    );
   }
 
   createPost(postAddEditVM: PostAddEditVM): Observable<string> {

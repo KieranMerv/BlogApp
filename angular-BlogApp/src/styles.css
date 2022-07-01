@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 /*
+    font-family: 'Caramel', cursive;
     font-family: 'Kalam', cursive;
-    font-family: 'Yomogi', cursive;
 */
 
 body {
@@ -13,8 +13,20 @@ tabset > ul.nav-tabs > li.nav-item > a:not(.active).nav-link > span {
   color: lightgray;
 }
 
+.background-orange {
+  background-color: #F80;
+}
+
+.font-caramel {
+  font-family: 'Caramel';
+}
+
 .text-justify {
   text-align: justify;
+}
+
+.text-white {
+  color: white;
 }
 
 @media all and (min-width: 768px) {

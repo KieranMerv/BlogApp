@@ -68,7 +68,7 @@
               </svg>
               Update
             </button>
-            <button type="button" (click)="openModal(template)" class="btn btn-danger" [attr.disabled]="busyStatusDelete === true ? '' : null">
+            <button type="button" (click)="openModal(template)" class="btn btn-danger" [attr.disabled]="busyStatusDelete === true ? '' : (userUpdateForm.valid === false ? '' : null)">
               <span *ngIf="busyStatusDelete === true" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
               <span *ngIf="busyStatusDelete === true" class="visually-hidden">Loading...</span>
               <svg *ngIf="busyStatusDelete === false" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
