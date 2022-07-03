@@ -1,6 +1,6 @@
 <main class="my-5 container-fluid">
   <div class="d-flex flex-column flex-lg-row">
-    <div class="px-5 w-100 mb-5 d-flex flex-column flex-lg-row">
+    <div class="px-3 px-lg-5 w-100 mb-5 d-flex flex-column flex-lg-row">
       <div>
         <a class="text-white fs-5" href="https://www.vecteezy.com/free-vector/primary">Primary Vectors by Vecteezy</a>
         <img class="image-fluid w-100" src="../../assets/HomepageImage.jpg" alt="Homepage Image" />        
@@ -32,16 +32,16 @@
       <div class="w-100 w-lg-75" *ngFor="let publicPost of postVMPublicCollection">
 
         <!-- Single Card -->
-        <div class="card border-0 shadow my-3 py-5 px-1 px-lg-5">
+        <div class="card border-0 shadow my-3 py-5 px-1 px-lg-5 white-space-break-spaces">
           <div class="card-body">
-            <h1 class="card-title mb-5">{{ publicPost.title }}<small class="fs-5">{{ publicPost.isPrivate ? ' [Private]'
+            <h2 class="card-title mb-5">{{ publicPost.title }}<small class="custon-small-font">{{ publicPost.isPrivate ? ' [Private]'
                 : ''
-                }}</small></h1>
+                }}</small></h2>
             <p class="card-text text-justify">{{ publicPost.body }}</p>
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-end">
               <div class="align-self-start align-self-lg-end mt-5">
-                <small class="d-block">Updated: {{ publicPost.updated | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>
-                <small class="d-block">Created: {{ publicPost.created | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>
+                <small class="d-block text-secondary opacity-75 custom-small-font">Updated: {{ publicPost.updated | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>
+                <small class="d-block text-secondary opacity-75 custom-small-font">Created: {{ publicPost.created | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>
               </div>
               <div class="mt-5">
                 <p>Author: {{ publicPost.authorAlias }}</p>

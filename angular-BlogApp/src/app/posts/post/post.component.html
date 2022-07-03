@@ -9,11 +9,11 @@
       <form [formGroup]="postForm" (ngSubmit)="postForm.valid && onSubmit()">
         <div class="mb-3">
           <label for="titleInput" class="form-label">Post Title</label>
-          <input type="email" class="form-control" id="titleInput" formControlName="postTitle" [readonly]="!editMode" />
+          <input type="email" class="form-control custom-small-font" id="titleInput" formControlName="postTitle" [readonly]="!editMode" />
         </div>
         <div class="mb-3">
           <label for="bodyTextarea" class="form-label">Post Content</label>
-          <textarea class="form-control" id="bodyTextarea" rows="7" formControlName="postBody" [readonly]="!editMode"></textarea>
+          <textarea class="form-control custom-small-font" id="bodyTextarea" rows="7" formControlName="postBody" [readonly]="!editMode"></textarea>
         </div>
         <div class="d-flex justify-content-start my-5">
           <div class="form-check">
@@ -31,8 +31,8 @@
         </div>
         <div class="d-flex flex-column flex-lg-row justify-content-between align-items-end">
           <div class="align-self-start align-self-lg-end mt-5">
-            <small class="d-block text-secondary opacity-50 fs-5">Updated: {{ postVM.updated | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>
-            <small class="d-block text-secondary opacity-50 fs-5">Created: {{ postVM.created | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>
+            <small class="d-block text-secondary opacity-75 custom-small-font">Updated: {{ postVM.updated | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>
+            <small class="d-block text-secondary opacity-75 custom-small-font">Created: {{ postVM.created | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>
           </div>
           <div class="d-flex justify-content-end mt-5">
             <button *ngIf="editMode" type="submit" class="btn me-2" [ngClass]="this.postId === null ? 'btn-success' : 'btn-primary'" [attr.disabled]="busyStatusCreateUpdate === true ? '' : (postForm.valid === false ? '' : null)">

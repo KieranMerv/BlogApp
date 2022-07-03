@@ -14,14 +14,14 @@
     <div class="w-100 w-lg-75" *ngFor="let post of postVMCollection">
   
       <!-- Single Card -->
-      <div class="card border-0 shadow my-3 py-5 px-1 px-lg-5">
+      <div class="card border-0 shadow my-3 py-5 px-1 px-lg-5 white-space-break-spaces">
         <div class="card-body">
-          <h1 class="card-title mb-5">{{ post.title }}<small class="fs-5">{{ post.isPrivate ?  ' [Private]' : '' }}</small></h1>
+          <h2 class="card-title mb-5">{{ post.title }}<small class="custom-small-font">{{ post.isPrivate ?  ' [Private]' : '' }}</small></h2>
           <p class="card-text text-justify">{{ post.body }}</p>
           <div class="d-flex flex-column flex-lg-row justify-content-between align-items-end">
             <div class="align-self-start align-self-lg-end mt-5">
-              <small class="d-block text-secondary opacity-50 fs-5">Updated: {{ post.updated | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>
-              <small class="d-block text-secondary opacity-50 fs-5">Created: {{ post.created | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>
+              <small class="d-block text-secondary opacity-75 custom-small-font">Updated: {{ post.updated | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>
+              <small class="d-block text-secondary opacity-75 custom-small-font">Created: {{ post.created | date:'dd MMM yyyy hh:mm:ss aaaa' }}</small>
             </div>
             <div class="mt-5">
               <a routerLink="/posts/{{post.id}}" class="btn btn-primary">
